@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Atelier Nimbo Perfumería</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: película de scroll en 3D (la cámara vuela entre nubes, el frasco, sus notas y la colección) y debajo la tienda completa en tono nocturno. Diseño de un solo tema oscuro, a propósito. */
+:root {
+  --bg: #0A0910;
+  --surface: #14121C;
+  --surface-2: #1D1A27;
+  --ink: #F4F1F8;
+  --muted: #9D97AA;
+  --line: #2B2737;
+  --amber: #E8A54B;
+  --lav: #B9A7E8;
+  --on-amber: #1A1208;
+  --ok: #6FC896;
+  --danger: #F2867E;
+  --shadow: 0 30px 60px -30px rgba(0,0,0,.8);
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-serif: "Instrument Serif", "Didot", Georgia, serif;
+  --f-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--f-body); }
+body.locked { overflow: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--bg); }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 700; line-height: 1.02; letter-spacing: -.03em; text-wrap: balance; margin: 0; }
+em { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: -.01em; color: var(--amber); }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font: 500 11px/1.4 var(--f-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+section { padding-block: 96px; }
+.sec-head { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 44px; }
+.sec-head h2 { font-size: clamp(36px, 6vw, 72px); }
+.sec-head p { color: var(--muted); max-width: 54ch; font-size: 17px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; border-radius: 999px; padding: 12px 22px; font-weight: 600; font-size: 15px; transition: background .2s, transform .15s, border-color .2s, filter .2s; text-decoration: none; }
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--amber); color: var(--on-amber); }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-ghost { background: rgba(255,255,255,.04); border-color: var(--line); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--ink); }
+.btn-block { width: 100%; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.link { background: none; border: 0; padding: 0; color: var(--amber); font-weight: 600; }
+.icon-btn { position: relative; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 999px; border: 0; background: transparent; color: var(--ink); }
+.icon-btn:hover { background: var(--surface-2); }
+.icon-btn svg { width: 20px; height: 20px; }
+.count { position: absolute; top: 2px; right: 0; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--amber); color: var(--on-amber); font: 600 11px/18px var(--f-mono); text-align: center; }
+.count[data-n="0"], .count:empty { display: none; }
+
+/* Header */
+.demo-bar { background: var(--surface-2); color: var(--muted); font: 500 11px/1.4 var(--f-mono); text-align: center; padding-block: 7px; letter-spacing: .04em; }
+.site-head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: rgba(10, 9, 16, .72); backdrop-filter: saturate(1.6) blur(16px); -webkit-backdrop-filter: saturate(1.6) blur(16px); border-bottom: 1px solid rgba(255,255,255,.06); }
+.head-row { display: flex; align-items: center; gap: 16px; height: 56px; }
+.logo { display: flex; align-items: baseline; gap: 6px; text-decoration: none; white-space: nowrap; }
+.logo b { font: 700 18px/1 var(--f-display); letter-spacing: -.02em; }
+.logo i { font: italic 400 20px/1 var(--f-serif); color: var(--amber); }
+.main-nav { display: flex; gap: 2px; margin-left: 16px; }
+.main-nav a { padding: 7px 12px; border-radius: 999px; text-decoration: none; font-size: 13px; color: var(--muted); }
+.main-nav a:hover { color: var(--ink); }
+.head-actions { margin-left: auto; display: flex; align-items: center; gap: 2px; }
+.search { display: flex; align-items: center; gap: 6px; background: var(--surface-2); border-radius: 999px; padding: 0 12px; height: 36px; margin-right: 6px; }
+.search svg { width: 15px; height: 15px; color: var(--muted); flex: none; }
+.search input { border: 0; background: transparent; width: 170px; outline: none; font-size: 14px; }
+.menu-btn { display: none; }
+@media (max-width: 960px) { .main-nav { display: none; } .menu-btn { display: grid; } }
+@media (max-width: 640px) { .search { display: none; } }
+
+/* Película de scroll */
+.film { position: relative; height: 640vh; }
+.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: radial-gradient(120% 80% at 50% 100%, #1C1530 0%, var(--bg) 60%); }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.stage::before { content: ""; position: absolute; inset: auto 0 0; height: 45%; z-index: 1; pointer-events: none; background: linear-gradient(transparent, rgba(5,4,9,.75)); }
+@media (max-aspect-ratio: 1/1) { .stage .beat.left > div, .stage .beat.right > div { align-items: center; justify-content: flex-end; text-align: center; } .stage .beat.center[data-a=".87"] > div { justify-content: flex-end; } }
+.stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(90% 70% at 50% 50%, transparent 55%, rgba(5,4,9,.7) 100%); }
+.beat { position: absolute; inset: 0; z-index: 2; display: flex; pointer-events: none; padding-block: 96px 56px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); opacity: 0; will-change: opacity, transform; }
+.beat > div { max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.beat .btn, .beat button { pointer-events: auto; }
+.beat.center > div { align-items: center; justify-content: center; text-align: center; }
+.beat.left > div { justify-content: flex-end; }
+.beat.right > div { align-items: flex-end; justify-content: center; text-align: right; }
+.beat.bottom > div { align-items: center; justify-content: flex-end; text-align: center; }
+.beat h1 { font-size: clamp(46px, 9vw, 128px); text-shadow: 0 4px 40px rgba(0,0,0,.5); }
+.beat h2 { font-size: clamp(40px, 7.5vw, 104px); text-shadow: 0 4px 40px rgba(0,0,0,.5); }
+.beat .big { font-size: clamp(30px, 4.6vw, 60px); max-width: 15ch; text-shadow: 0 4px 30px rgba(0,0,0,.6); }
+.beat p.lead { font-size: clamp(16px, 1.6vw, 20px); color: #D6D0E0; max-width: 40ch; text-shadow: 0 2px 16px rgba(0,0,0,.7); }
+.beat .row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 8px; }
+.scroll-hint { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 26px; font: 500 11px var(--f-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.scroll-hint i { width: 1px; height: 46px; background: linear-gradient(var(--ink), transparent); animation: drip 1.8s ease-in-out infinite; transform-origin: top; }
+@keyframes drip { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+.progress { position: absolute; z-index: 3; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; gap: 6px; }
+.progress i { width: 26px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.18); overflow: hidden; }
+.progress i b { display: block; height: 100%; width: 0; background: var(--ink); }
+.film.nogl { height: auto; }
+.film.nogl .stage { position: relative; height: auto; display: flex; flex-direction: column; }
+.film.nogl canvas, .film.nogl .progress, .film.nogl .scroll-hint { display: none; }
+.film.nogl .beat { position: relative; opacity: 1 !important; transform: none !important; padding-block: 64px; }
+.nogl-art { display: none; }
+.film.nogl .nogl-art { display: grid; place-items: center; padding-top: 40px; }
+.nogl-art svg { width: 200px; height: auto; }
+
+/* Spec bento */
+.bento { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.tile { background: var(--surface); border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px; min-width: 0; border: 1px solid rgba(255,255,255,.04); }
+.tile.span2 { grid-column: span 2; }
+.tile .num { font: 800 clamp(44px, 5.6vw, 76px)/1 var(--f-display); letter-spacing: -.04em; background: linear-gradient(180deg, var(--ink), var(--muted)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.tile .num.amber { background: linear-gradient(180deg, #F7C982, var(--amber)); -webkit-background-clip: text; background-clip: text; }
+.tile .num small { font-size: .45em; letter-spacing: -.02em; }
+.tile b { font-size: 17px; }
+.tile p { color: var(--muted); font-size: 15px; }
+@media (max-width: 900px) { .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .bento { grid-template-columns: 1fr; } .tile.span2 { grid-column: auto; } }
+
+/* Categorías */
+.cats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.cat { display: flex; flex-direction: column; gap: 6px; text-align: left; background: var(--surface); border: 1px solid rgba(255,255,255,.04); border-radius: 22px; padding: 14px 14px 18px; transition: transform .25s, border-color .25s; }
+.cat:hover { transform: translateY(-4px); border-color: var(--line); }
+.cat .art { aspect-ratio: 1; max-width: 100%; border-radius: 14px; display: grid; place-items: center; background: radial-gradient(80% 70% at 50% 70%, color-mix(in oklab, var(--tint) 40%, var(--surface-2)), var(--surface-2)); margin-bottom: 8px; }
+.cat .art svg { width: 58%; height: auto; }
+.cat b { font: 700 19px/1.1 var(--f-display); letter-spacing: -.02em; }
+.cat span { font: 12px var(--f-mono); color: var(--muted); }
+@media (max-width: 960px) { .cats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .cats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Catálogo */
+.seg { display: flex; gap: 4px; background: var(--surface); border-radius: 999px; padding: 4px; overflow-x: auto; max-width: 100%; margin: 0 auto 18px; width: max-content; scrollbar-width: none; }
+.seg::-webkit-scrollbar { display: none; }
+.seg button { border: 0; background: none; border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-bottom: 28px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 13px; font-weight: 500; }
+.chip i { width: 9px; height: 9px; border-radius: 50%; background: var(--dot); }
+.chip[aria-pressed="true"] { background: var(--surface-2); border-color: var(--ink); }
+.toolbar select { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; }
+.res { width: 100%; text-align: center; color: var(--muted); font-size: 13px; }
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+.card { position: relative; display: flex; flex-direction: column; background: var(--surface); border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.04); transition: transform .25s, border-color .25s; }
+.card:hover { transform: translateY(-4px); border-color: var(--line); }
+.card .art { position: relative; aspect-ratio: 4 / 5; max-width: 100%; width: 100%; display: grid; place-items: center; border: 0; padding: 0; background: radial-gradient(80% 60% at 50% 78%, color-mix(in oklab, var(--tint) 45%, var(--surface)), color-mix(in oklab, var(--tint) 6%, var(--surface)) 75%); }
+.card .art svg { width: 56%; height: auto; transition: transform .4s; filter: drop-shadow(0 18px 24px rgba(0,0,0,.45)); }
+.card:hover .art svg { transform: translateY(-6px) scale(1.03); }
+.badge { position: absolute; top: 12px; left: 12px; font: 600 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--amber); }
+.badge.sale { background: var(--amber); color: var(--on-amber); padding: 3px 8px; border-radius: 999px; }
+.wish { position: absolute; top: 6px; right: 6px; }
+.wish svg { width: 18px; height: 18px; }
+.wish[aria-pressed="true"] svg { fill: var(--amber); stroke: var(--amber); }
+.card .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.card .meta { font: 11px var(--f-mono); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.card h3 { font-size: 20px; letter-spacing: -.02em; }
+.card .notes { font-size: 13px; color: var(--muted); }
+.card .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 10px; }
+.price { font: 500 15px var(--f-mono); font-variant-numeric: tabular-nums; }
+.price small { color: var(--muted); font-size: 11px; }
+.price s { color: var(--muted); font-size: 12px; margin-left: 4px; }
+.add { width: 36px; height: 36px; border-radius: 999px; border: 0; background: var(--ink); color: var(--bg); display: grid; place-items: center; flex: none; }
+.add svg { width: 17px; height: 17px; }
+.empty { grid-column: 1 / -1; text-align: center; padding: 48px 16px; background: var(--surface); border-radius: 22px; color: var(--muted); display: flex; flex-direction: column; gap: 12px; align-items: center; }
+@media (max-width: 420px) { .card h3 { font-size: 17px; } .card .notes { display: none; } .card .body { padding: 12px; } }
+
+/* Set */
+.discover { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border-radius: 28px; overflow: hidden; background: linear-gradient(135deg, #241A35, #120F1A 70%); border: 1px solid rgba(255,255,255,.05); }
+.discover .txt { padding: 48px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; justify-content: center; }
+.discover h2 { font-size: clamp(34px, 4.6vw, 58px); }
+.discover p { color: var(--muted); max-width: 42ch; }
+.discover .art { display: grid; place-items: center; padding: 32px; background: radial-gradient(60% 60% at 50% 70%, rgba(185,167,232,.25), transparent 70%); }
+.discover .art svg { width: 100%; max-width: 420px; height: auto; filter: drop-shadow(0 24px 30px rgba(0,0,0,.5)); }
+@media (max-width: 760px) { .discover { grid-template-columns: 1fr; } .discover .txt { padding: 32px 22px 8px; } }
+
+/* Pasos y pagos */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; list-style: none; margin: 0; padding: 0; counter-reset: s; }
+.steps li { counter-increment: s; background: var(--surface); border-radius: 22px; padding: 26px; }
+.steps li::before { content: "Paso " counter(s); font: 500 11px var(--f-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--amber); }
+.steps h3 { font-size: 24px; margin-block: 10px 6px; }
+.steps p { color: var(--muted); font-size: 15px; }
+.pays { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+.pay { background: var(--surface); border-radius: 22px; padding: 22px; display: flex; gap: 14px; align-items: flex-start; min-width: 0; }
+.pay .ico { width: 44px; height: 44px; border-radius: 12px; background: rgba(232,165,75,.12); color: var(--amber); display: grid; place-items: center; flex: none; }
+.pay .ico svg { width: 22px; height: 22px; }
+.pay b { display: block; }
+.pay p { color: var(--muted); font-size: 14px; }
+@media (max-width: 860px) { .steps, .pays { grid-template-columns: 1fr; } }
+@media (min-width: 560px) and (max-width: 860px) { .pays { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Reseñas */
+.reviews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.review { background: var(--surface); border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 14px; }
+.review blockquote { margin: 0; font: 400 24px/1.3 var(--f-serif); }
+.review .stars { color: var(--amber); letter-spacing: 3px; font-size: 14px; }
+.review footer { font-size: 13px; color: var(--muted); margin-top: auto; }
+@media (max-width: 860px) { .reviews { grid-template-columns: 1fr; } }
+
+/* FAQ */
+.faq { max-width: 820px; margin: 0 auto; }
+.faq details { border-bottom: 1px solid var(--line); padding-block: 18px; }
+.faq summary { cursor: pointer; font: 600 19px var(--f-display); letter-spacing: -.01em; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 400 22px/1 var(--f-mono); color: var(--amber); }
+.faq details[open] summary::after { content: "−"; }
+.faq details p { color: var(--muted); margin-top: 10px; max-width: 65ch; }
+
+/* Contacto */
+.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.channels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.channel { background: var(--surface); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.channel .val { font-weight: 600; overflow-wrap: anywhere; user-select: all; }
+.channel small { color: var(--muted); }
+.channel .link { align-self: flex-start; margin-top: 6px; font-size: 13px; }
+.channel.wide { grid-column: 1 / -1; }
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.contact .form { background: var(--surface); border-radius: 22px; padding: 22px; align-content: start; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label, .field > span { font-size: 13px; font-weight: 600; }
+.field input, .field select, .field textarea { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 12px; padding: 12px 13px; font-size: 15px; }
+.field textarea { min-height: 110px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--amber); box-shadow: 0 0 0 3px rgba(232,165,75,.18); }
+@media (max-width: 860px) { .contact { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .channels, .form { grid-template-columns: 1fr; } }
+
+/* Newsletter y pie */
+.news { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 56px 24px; border-radius: 28px; background: radial-gradient(80% 120% at 50% 0%, rgba(232,165,75,.22), transparent 60%), var(--surface); }
+.news h2 { font-size: clamp(32px, 5vw, 56px); }
+.news p { color: var(--muted); }
+.news form { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 460px; }
+.news input { flex: 1 1 220px; min-width: 0; border: 1px solid var(--line); border-radius: 999px; padding: 12px 18px; background: var(--bg); }
+footer.site { border-top: 1px solid var(--line); padding-block: 48px 32px; font-size: 14px; }
+.foot-grid { display: grid; grid-template-columns: 1.4fr repeat(3, minmax(0, 1fr)); gap: 28px; }
+.foot-grid h4 { font: 500 11px var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.foot-grid ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.foot-grid a, .foot-grid .lnk { text-decoration: none; background: none; border: 0; padding: 0; font-size: 14px; text-align: left; color: var(--ink); }
+.foot-grid a:hover, .foot-grid .lnk:hover { color: var(--amber); }
+.paybadges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.paybadges span { font: 500 11px var(--f-mono); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; color: var(--muted); }
+.legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+@media (max-width: 860px) { .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .foot-grid > :first-child { grid-column: 1 / -1; } }
+
+.wa { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 40; display: flex; align-items: center; gap: 8px; background: #2E9E62; color: #fff; border: 0; border-radius: 999px; padding: 12px 16px; font-weight: 600; box-shadow: var(--shadow); }
+.wa svg { width: 20px; height: 20px; }
+
+/* Ventanas */
+.overlay { position: fixed; inset: 0; z-index: 80; background: rgba(4, 3, 8, .66); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; animation: fade .2s; }
+@keyframes fade { from { opacity: 0; } }
+@keyframes slide { from { transform: translateX(30px); opacity: 0; } }
+@keyframes rise { from { transform: translateY(16px); opacity: 0; } }
+.drawer { margin-left: auto; width: min(440px, 100%); height: 100%; background: var(--surface); display: flex; flex-direction: column; animation: slide .25s; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.drawer.left { margin-left: 0; margin-right: auto; padding-right: 0; padding-left: env(safe-area-inset-left, 0px); }
+.d-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.d-head h2 { font-size: 24px; }
+.d-body { flex: 1; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+.d-foot { border-top: 1px solid var(--line); padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+.modal { margin: auto; width: min(980px, calc(100% - 24px)); max-height: calc(100% - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); overflow-y: auto; background: var(--surface); border-radius: 24px; animation: rise .25s; position: relative; border: 1px solid var(--line); }
+.modal.sm { width: min(460px, calc(100% - 24px)); }
+.modal .close { position: absolute; top: 10px; right: 10px; z-index: 2; background: var(--surface-2); }
+.pd { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.pd .art { display: grid; place-items: center; padding: 32px; min-height: 400px; background: radial-gradient(70% 60% at 50% 75%, color-mix(in oklab, var(--tint) 45%, var(--surface)), color-mix(in oklab, var(--tint) 5%, var(--surface)) 80%); }
+.pd .art svg { width: 66%; max-width: 280px; height: auto; filter: drop-shadow(0 24px 30px rgba(0,0,0,.5)); }
+.pd .info { padding: 30px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.pd h2 { font-size: 40px; }
+.pd .desc { color: var(--muted); }
+.pd .pyr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.pd .pyr div { background: var(--surface-2); border-radius: 12px; padding: 10px; font-size: 13px; min-width: 0; }
+.meters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-size: 13px; }
+.dots { display: flex; gap: 4px; margin-top: 5px; }
+.dots i { flex: 1; height: 4px; border-radius: 2px; background: var(--line); }
+.dots i.on { background: var(--amber); }
+.sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+.size { border: 1px solid var(--line); background: transparent; border-radius: 12px; padding: 9px 13px; text-align: left; font-size: 13px; color: var(--muted); }
+.size b { display: block; font: 500 14px var(--f-mono); color: var(--ink); }
+.size[aria-pressed="true"] { border-color: var(--amber); background: rgba(232,165,75,.1); }
+.qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; }
+.qty button { width: 34px; height: 34px; border: 0; background: none; font-size: 16px; }
+.qty span { min-width: 22px; text-align: center; font: 500 14px var(--f-mono); }
+.buy-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.buy-row .btn { flex: 1 1 180px; }
+.hint { font-size: 12px; color: var(--muted); }
+@media (max-width: 720px) { .pd { grid-template-columns: 1fr; } .pd .art { min-height: 240px; padding: 20px; } .pd .info { padding: 20px; } .pd h2 { font-size: 30px; } }
+@media (max-width: 420px) { .pd .pyr { grid-template-columns: 1fr; } }
+
+.line { display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.line .thumb { width: 60px; height: 72px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in oklab, var(--tint) 30%, var(--surface-2)); }
+.line .thumb svg { width: 70%; height: auto; }
+.line b { display: block; font: 600 16px/1.2 var(--f-display); letter-spacing: -.01em; }
+.line small { color: var(--muted); font: 12px var(--f-mono); }
+.line .rm { border: 0; background: none; color: var(--muted); font-size: 12px; text-decoration: underline; padding: 0; margin-left: 8px; }
+.ship-bar { background: var(--surface-2); border-radius: 12px; padding: 12px; font-size: 13px; }
+.ship-bar .track { height: 5px; background: var(--line); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+.ship-bar .track i { display: block; height: 100%; background: var(--ok); border-radius: 3px; transition: width .3s; }
+.totals { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.totals div { display: flex; justify-content: space-between; gap: 12px; }
+.totals .grand { font-weight: 700; font-size: 17px; border-top: 1px solid var(--line); padding-top: 8px; margin-top: 4px; }
+.totals .disc { color: var(--ok); }
+.coupon { display: flex; gap: 8px; }
+.coupon input { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; background: var(--bg); text-transform: uppercase; }
+.cart-empty { text-align: center; color: var(--muted); padding: 40px 10px; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.cart-empty strong { font: 700 22px var(--f-display); color: var(--ink); letter-spacing: -.02em; }
+
+.co { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+.co-main { padding: 30px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.co-main h2 { font-size: 30px; }
+.co-side { background: var(--surface-2); padding: 30px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.co-side h3 { font-size: 20px; }
+.co-side .line { grid-template-columns: 48px minmax(0, 1fr) auto; }
+.co-side .line .thumb { width: 48px; height: 58px; }
+.stepper { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.stepper li { flex: 1; font: 500 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-top: 3px solid var(--line); padding-top: 8px; }
+.stepper li.on { color: var(--ink); border-color: var(--amber); }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer; }
+.opt:has(input:checked) { border-color: var(--amber); background: rgba(232,165,75,.08); }
+.opt input { accent-color: var(--amber); margin-top: 4px; }
+.opt b { display: block; font-size: 14px; }
+.opt span { color: var(--muted); font-size: 13px; }
+.opt .amt { margin-left: auto; font: 500 13px var(--f-mono); white-space: nowrap; color: var(--ink); }
+.pay-detail { border: 1px dashed var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+.ref { font: 500 18px var(--f-mono); letter-spacing: .06em; background: var(--bg); border-radius: 10px; padding: 10px 12px; overflow-wrap: anywhere; }
+.co-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.done { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-block: 12px; }
+.done .ok { width: 60px; height: 60px; border-radius: 50%; background: var(--ok); color: #0A0910; display: grid; place-items: center; }
+.done .ok svg { width: 30px; height: 30px; }
+@media (max-width: 780px) { .co { grid-template-columns: 1fr; } .co-side { order: -1; padding: 20px; } .co-main { padding: 20px; } }
+
+.tabs { display: flex; gap: 4px; background: var(--bg); border-radius: 999px; padding: 4px; }
+.tabs button { flex: 1; border: 0; background: none; border-radius: 999px; padding: 8px; font-weight: 600; font-size: 14px; color: var(--muted); }
+.tabs button[aria-selected="true"] { background: var(--surface-2); color: var(--ink); }
+.mnav { display: flex; flex-direction: column; }
+.mnav button { padding: 14px 4px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: 700 24px var(--f-display); letter-spacing: -.02em; }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 100; background: var(--ink); color: var(--bg); padding: 12px 18px; border-radius: 999px; font-size: 14px; font-weight: 500; box-shadow: var(--shadow); max-width: calc(100% - 32px); animation: rise .2s; }
+</style>
+
+</head>
+<body>
+<div class="demo-bar wrap">Showcase de demostración · productos, precios y contactos de ejemplo · no se realizan cobros</div>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h16M4 16h16"/></svg></button>
+    <a class="logo" href="#inicio"><b>Atelier</b><i>Nimbo</i></a>
+    <nav class="main-nav" aria-label="Principal">
+      <a href="#coleccion">Colección</a>
+      <a href="#categorias">Categorías</a>
+      <a href="#pagos">Formas de pago</a>
+      <a href="#ayuda">Ayuda</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="head-actions">
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar aroma o nota" aria-label="Buscar perfumes"></label>
+      <button class="icon-btn" id="accountBtn" aria-label="Mi cuenta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button>
+      <button class="icon-btn" id="wishBtn" aria-label="Favoritos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="count" id="wishCount"></span></button>
+      <button class="icon-btn" id="cartBtn" aria-label="Carrito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="count" id="cartCount"></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="inicio">
+  <!-- Película de scroll -->
+  <section class="film" id="film" style="padding:0">
+    <div class="stage" id="stage">
+      <canvas id="gl" aria-hidden="true"></canvas>
+      <div class="nogl-art" id="noglArt"></div>
+      <div class="beat center" data-a="0" data-b=".14" data-first><div>
+        <span class="eyebrow">Atelier Nimbo · Perfumería de autor · Guadalajara</span>
+        <h1>Un perfume nace<br>entre las <em>nubes</em>.</h1>
+        <p class="lead">Desliza para atravesarlas y conocer Copal Sagrado, nuestro lanzamiento de temporada.</p>
+        <div class="scroll-hint"><i></i>Desliza</div>
+      </div></div>
+      <div class="beat left" data-a=".18" data-b=".34"><div>
+        <span class="eyebrow">Nuevo · Extrait de parfum · 24 % de esencia</span>
+        <h2>Copal <em>Sagrado</em>.</h2>
+        <p class="lead">Humo blanco de copal sobre un fondo de ámbar y madera. Ceremonial, cálido y con más de 10 horas en la piel.</p>
+      </div></div>
+      <div class="beat right" data-a=".36" data-b=".45"><div>
+        <span class="eyebrow">Salida · 0 a 15 min</span>
+        <p class="big" style="font:700 clamp(30px,4.6vw,60px)/1.05 var(--f-display);letter-spacing:-.03em">Limón y pimienta <em>rosa</em>.</p>
+      </div></div>
+      <div class="beat left" data-a=".45" data-b=".53"><div>
+        <span class="eyebrow">Corazón · 15 min a 3 h</span>
+        <p class="big" style="font:700 clamp(30px,4.6vw,60px)/1.05 var(--f-display);letter-spacing:-.03em">Copal blanco e <em>incienso</em>.</p>
+      </div></div>
+      <div class="beat right" data-a=".53" data-b=".61"><div>
+        <span class="eyebrow">Fondo · 3 h en adelante</span>
+        <p class="big" style="font:700 clamp(30px,4.6vw,60px)/1.05 var(--f-display);letter-spacing:-.03em">Palo santo, ámbar gris y <em>mirra</em>.</p>
+      </div></div>
+      <div class="beat bottom" data-a=".64" data-b=".84"><div>
+        <span class="eyebrow" id="lineMeta">Verde · EDP</span>
+        <h2 id="lineName" style="font-size:clamp(38px,6vw,84px)">Bruma de Higo</h2>
+        <p class="lead" id="lineDesc"></p>
+      </div></div>
+      <div class="beat center" data-a=".87" data-b="1.01"><div>
+        <span class="eyebrow">La colección</span>
+        <h2>Doce aromas.<br>Encuentra el <em>tuyo</em>.</h2>
+        <div class="row"><button class="btn btn-primary" data-go="coleccion">Ver la colección</button><button class="btn btn-ghost" data-open-product="copal-sagrado">Copal Sagrado · desde $560</button></div>
+      </div></div>
+      <div class="progress" id="progress" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Por qué Atelier Nimbo</span><h2>Hecho en lotes <em>pequeños</em>.</h2></div>
+      <div class="bento">
+        <div class="tile span2"><span class="num amber">300<small> frascos</small></span><b>por lote, numerados a mano</b><p>Maceramos cada fórmula seis semanas antes de embotellar. Cuando un lote se acaba, el siguiente tarda un mes.</p></div>
+        <div class="tile"><span class="num">24<small> %</small></span><b>de esencia en los Extrait</b><p>Más concentración, más duración en piel y ropa.</p></div>
+        <div class="tile"><span class="num">2<small> ml</small></span><b>de muestra de regalo</b><p>En cada pedido, para que conozcas otro aroma.</p></div>
+        <div class="tile"><span class="num">12<small> MSI</small></span><b>meses sin intereses</b><p>Con tarjetas participantes desde $1,200.</p></div>
+        <div class="tile span2"><span class="num amber">3<small> ingredientes</small></span><b>mexicanos en el centro de la colección</b><p>Copal de Morelos, vainilla de Papantla y flor de azahar de Montemorelos.</p></div>
+        <div class="tile"><span class="num">30<small> días</small></span><b>para cambios</b><p>Si el frasco sigue sellado.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="categorias" style="padding-top:24px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Categorías</span><h2>Compra por <em>categoría</em>.</h2></div>
+      <div class="cats" id="cats"></div>
+    </div>
+  </section>
+
+  <section id="coleccion" style="padding-top:24px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Catálogo</span><h2>Toda la <em>colección</em>.</h2><p>Concentraciones: <span class="mono">EDT</span> 5–15 %, <span class="mono">EDP</span> 15–20 % y <span class="mono">Extrait</span> 20–30 % de esencia.</p></div>
+      <div class="seg" id="seg" role="group" aria-label="Categoría"></div>
+      <div class="toolbar">
+        <div id="fams" style="display:contents"></div>
+        <select id="fConc" aria-label="Concentración"><option value="">Todas las concentraciones</option><option>EDT</option><option>EDP</option><option>Extrait</option><option value="Set">Sets</option></select>
+        <select id="fMax" aria-label="Precio máximo"><option value="99999">Cualquier precio</option><option value="1000">Hasta $1,000</option><option value="1500">Hasta $1,500</option><option value="2000">Hasta $2,000</option></select>
+        <select id="sort" aria-label="Ordenar"><option value="rel">Destacados</option><option value="asc">Precio: menor a mayor</option><option value="desc">Precio: mayor a menor</option><option value="az">Nombre A–Z</option></select>
+        <span class="res" id="resCount"></span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section style="padding-top:24px">
+    <div class="wrap">
+      <div class="discover">
+        <div class="txt">
+          <span class="eyebrow">Set de descubrimiento</span>
+          <h2>Cinco aromas antes de elegir el <em>tuyo</em>.</h2>
+          <p>Cinco miniaturas de 10 ml para usar una semana cada una. Incluye un cupón de $300 para tu frasco de 50 o 100 ml.</p>
+          <button class="btn btn-primary" data-open-product="set-descubrimiento">Ver el set · $1,490</button>
+        </div>
+        <div class="art" id="discoverArt"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pagos">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Cómo comprar</span><h2>Paga como <em>prefieras</em>.</h2><p>Tres pasos y llega a tu puerta. Seis formas de pago, todas en pesos mexicanos.</p></div>
+      <ol class="steps">
+        <li><h3>Elige tu aroma</h3><p>Filtra por familia olfativa, revisa la pirámide de notas y escoge 10, 50 o 100 ml.</p></li>
+        <li><h3>Paga</h3><p>Tarjeta a meses, PayPal, Mercado Pago, OXXO, transferencia o contra entrega.</p></li>
+        <li><h3>Recíbelo</h3><p>Estándar en 3 a 5 días hábiles, express en 1 a 2, o recógelo en la tienda.</p></li>
+      </ol>
+      <div class="pays" id="pays"></div>
+    </div>
+  </section>
+
+  <section style="padding-top:24px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Reseñas de ejemplo</span><h2>Se queda en la <em>memoria</em>.</h2><p>Textos de muestra para el showcase. En la web real aquí van las reseñas verificadas.</p></div>
+      <div class="reviews">
+        <article class="review"><div class="stars" aria-label="5 de 5">★★★★★</div><blockquote>“Copal Sagrado huele a mercado en domingo. Me dura todo el día en la ropa.”</blockquote><footer>Cliente de ejemplo · Zapopan</footer></article>
+        <article class="review"><div class="stars" aria-label="5 de 5">★★★★★</div><blockquote>“Pedí el set de descubrimiento y terminé comprando Bruma de Higo en 100 ml.”</blockquote><footer>Cliente de ejemplo · CDMX</footer></article>
+        <article class="review"><div class="stars" aria-label="4 de 5">★★★★☆</div><blockquote>“Llegó en dos días, muy bien empacado y con una muestra que no conocía.”</blockquote><footer>Cliente de ejemplo · Monterrey</footer></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="ayuda" style="padding-top:24px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Preguntas frecuentes</span><h2>Antes de <em>comprar</em>.</h2></div>
+      <div class="faq">
+        <details open><summary>¿Cuánto dura un perfume en la piel?</summary><p>Depende de la concentración y de tu piel. Un EDT dura de 3 a 5 horas, un EDP de 6 a 8 y un Extrait más de 10. Cada ficha muestra la duración estimada.</p></details>
+        <details><summary>¿Puedo probar antes de comprar el frasco grande?</summary><p>Sí. Cada perfume tiene presentación de 10 ml y el set de descubrimiento trae cinco aromas. Además, cada pedido incluye una muestra de 2 ml.</p></details>
+        <details><summary>¿Cuánto cuesta el envío y cuánto tarda?</summary><p>Estándar $129 (gratis desde $1,499), de 3 a 5 días hábiles. Express $249, de 1 a 2 días hábiles. Recoger en tienda no tiene costo.</p></details>
+        <details><summary>¿Puedo pagar a meses sin intereses?</summary><p>Sí, a 3, 6 o 12 meses con tarjetas de crédito participantes en compras desde $1,200.</p></details>
+        <details><summary>¿Qué pasa si no me gusta el aroma?</summary><p>Tienes 30 días para cambiarlo si el frasco sigue sellado. Si ya lo abriste, puedes cambiar la presentación de 10 ml por otra de igual precio.</p></details>
+        <details><summary>¿Facturan?</summary><p>Sí. Pide tu factura con tu número de pedido y tus datos fiscales dentro del mismo mes de compra.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" style="padding-top:24px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Contacto</span><h2>Visítanos o <em>escríbenos</em>.</h2></div>
+      <div class="contact">
+        <div class="channels">
+          <div class="channel"><span class="eyebrow">WhatsApp</span><span class="val">33 1234 5678</span><small>Respuesta en horario de tienda</small><button class="link" data-copy="33 1234 5678">Copiar número</button></div>
+          <div class="channel"><span class="eyebrow">Correo</span><span class="val">hola@tumarca.mx</span><small>Pedidos, facturas y mayoreo</small><button class="link" data-copy="hola@tumarca.mx">Copiar correo</button></div>
+          <div class="channel"><span class="eyebrow">Instagram</span><span class="val">@tumarca.perfumes</span><small>Lanzamientos y sorteos</small></div>
+          <div class="channel"><span class="eyebrow">Teléfono</span><span class="val">33 8765 4321</span><small>Lun a sáb · 10:00 a 19:00</small></div>
+          <div class="channel wide"><span class="eyebrow">Tienda física</span><span class="val">Av. Ejemplo 123, Col. Americana, Guadalajara, Jal.</span><small>Lunes a sábado 11:00–20:00 · Domingo 12:00–17:00 · Prueba de aromas sin cita</small></div>
+        </div>
+        <form class="form" id="contactForm">
+          <div class="field"><label for="cName">Nombre</label><input id="cName" required autocomplete="name"></div>
+          <div class="field"><label for="cMail">Correo</label><input id="cMail" type="email" required autocomplete="email"></div>
+          <div class="field full"><label for="cTopic">Tema</label><select id="cTopic"><option>Duda sobre un perfume</option><option>Estado de mi pedido</option><option>Cambios y devoluciones</option><option>Mayoreo y regalos corporativos</option><option>Facturación</option></select></div>
+          <div class="field full"><label for="cMsg">Mensaje</label><textarea id="cMsg" required placeholder="Cuéntanos en qué te ayudamos"></textarea></div>
+          <div class="field full"><button class="btn btn-primary" type="submit">Enviar mensaje</button></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:24px">
+    <div class="wrap">
+      <div class="news">
+        <span class="eyebrow">Boletín</span>
+        <h2>10 % en tu primera <em>compra</em>.</h2>
+        <p>Suscríbete y recibe el código, más avisos de cada lote nuevo.</p>
+        <form id="newsForm"><input id="newsMail" type="email" required placeholder="tu@correo.com" aria-label="Correo"><button class="btn btn-primary" type="submit">Suscribirme</button></form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="logo" href="#inicio"><b>Atelier</b><i>Nimbo</i></a>
+        <p style="color:var(--muted);margin-top:10px;max-width:36ch">Perfumería de autor en Guadalajara. Lotes pequeños, frascos rellenables y envíos a todo México.</p>
+        <div class="paybadges"><span>VISA</span><span>Mastercard</span><span>AMEX</span><span>PayPal</span><span>Mercado Pago</span><span>OXXO</span><span>SPEI</span></div>
+      </div>
+      <div><h4>Tienda</h4><ul><li><button class="lnk" data-cat="ella">Para ella</button></li><li><button class="lnk" data-cat="el">Para él</button></li><li><button class="lnk" data-cat="unisex">Unisex</button></li><li><button class="lnk" data-cat="nicho">Nicho</button></li><li><button class="lnk" data-cat="sets">Sets de regalo</button></li></ul></div>
+      <div><h4>Ayuda</h4><ul><li><a href="#ayuda">Preguntas frecuentes</a></li><li><a href="#ayuda">Envíos y entregas</a></li><li><a href="#ayuda">Cambios y devoluciones</a></li><li><a href="#ayuda">Facturación</a></li><li><a href="#contacto">Contacto</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><button class="lnk" data-soon>Aviso de privacidad</button></li><li><button class="lnk" data-soon>Términos y condiciones</button></li><li><button class="lnk" data-soon>Política de devoluciones</button></li></ul></div>
+    </div>
+    <div class="legal"><span>© 2026 Atelier Nimbo · Marca ficticia para demostración</span><span>Precios en pesos mexicanos, IVA incluido</span></div>
+  </div>
+</footer>
+
+<button class="wa" id="waBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg>WhatsApp</button>
+
+<div class="overlay" id="productOv" hidden><div class="modal" role="dialog" aria-modal="true" aria-label="Detalle del perfume"><button class="icon-btn close" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div id="productBody"></div></div></div>
+<div class="overlay" id="cartOv" hidden><aside class="drawer" role="dialog" aria-modal="true" aria-label="Carrito"><div class="d-head"><h2>Tu carrito</h2><button class="icon-btn" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="d-body" id="cartBody"></div><div class="d-foot" id="cartFoot"></div></aside></div>
+<div class="overlay" id="wishOv" hidden><aside class="drawer" role="dialog" aria-modal="true" aria-label="Favoritos"><div class="d-head"><h2>Favoritos</h2><button class="icon-btn" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="d-body" id="wishBody"></div></aside></div>
+<div class="overlay" id="checkoutOv" hidden><div class="modal" role="dialog" aria-modal="true" aria-label="Pago"><button class="icon-btn close" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button><div class="co"><div class="co-main" id="coMain"></div><aside class="co-side" id="coSide"></aside></div></div></div>
+<div class="overlay" id="accountOv" hidden><div class="modal sm" role="dialog" aria-modal="true" aria-label="Mi cuenta"><button class="icon-btn close" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <div style="padding:28px;display:flex;flex-direction:column;gap:16px">
+    <h2 style="font-size:28px">Mi cuenta</h2>
+    <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-tab="login">Iniciar sesión</button><button role="tab" aria-selected="false" data-tab="signup">Crear cuenta</button></div>
+    <form class="form" id="accountForm" style="grid-template-columns:1fr">
+      <div class="field" id="aNameF" hidden><label for="aName">Nombre</label><input id="aName" autocomplete="name"></div>
+      <div class="field"><label for="aMail">Correo</label><input id="aMail" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="aPass">Contraseña</label><input id="aPass" type="password" required minlength="6" autocomplete="current-password"></div>
+      <button class="btn btn-primary" type="submit" id="aSubmit">Entrar</button>
+      <p class="hint">Demostración: no se guarda ninguna cuenta. En la web real aquí verías tus pedidos, direcciones y favoritos.</p>
+    </form>
+  </div>
+</div></div>
+<div class="overlay" id="menuOv" hidden><aside class="drawer left" role="dialog" aria-modal="true" aria-label="Menú"><div class="d-head"><h2>Menú</h2><button class="icon-btn" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="d-body">
+  <label class="search" style="display:flex;margin:0;height:42px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="qm" type="search" placeholder="Buscar aroma o nota" aria-label="Buscar perfumes" style="width:100%"></label>
+  <nav class="mnav"><button data-go="coleccion">Colección</button><button data-go="categorias">Categorías</button><button data-go="pagos">Formas de pago</button><button data-go="ayuda">Preguntas frecuentes</button><button data-go="contacto">Contacto</button></nav>
+</div></aside></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script>
+(() => {
+/* ---------- Datos ---------- */
+const CATS = { ella: 'Para ella', el: 'Para él', unisex: 'Unisex', nicho: 'Nicho', sets: 'Sets de regalo' };
+const FAMS = { floral: ['Floral', '#E59AAE'], amaderado: ['Amaderado', '#9A7048'], ambar: ['Ámbar y especias', '#E8A54B'], citrico: ['Cítrico y fresco', '#E3C94F'], gourmand: ['Gourmand', '#D9A86C'], acuatico: ['Acuático', '#6FB3CC'], verde: ['Verde', '#8BB06A'] };
+const CAP = { gold: '#C9A45C', black: '#2A262C', silver: '#BFC3C8', wood: '#8A5A3B' };
+const ml = (...a) => [[10, a[0]], [50, a[1]], [100, a[2]]].map(([m, p]) => ({ label: m + ' ml', price: p }));
+const P = [
+  { id: 'copal-sagrado', name: 'Copal Sagrado', cats: ['unisex', 'nicho'], fam: 'ambar', conc: 'Extrait', badge: 'Nuevo', shape: 'faceted', liquid: '#C98B3A', cap: 'wood', int: 5, dur: 5, desc: 'Humo blanco de copal sobre un fondo de ámbar y madera. Ceremonial, cálido y muy persistente.', notes: [['Limón', 'Pimienta rosa'], ['Copal blanco', 'Incienso'], ['Palo santo', 'Ámbar gris', 'Mirra']], sizes: ml(560, 2090, 3090) },
+  { id: 'bruma-higo', name: 'Bruma de Higo', cats: ['unisex'], fam: 'verde', conc: 'EDP', badge: 'Más vendido', shape: 'square', liquid: '#9DBF7A', cap: 'gold', int: 3, dur: 4, desc: 'Higo recién abierto bajo la sombra del árbol. Verde, lechoso y luminoso.', notes: [['Hoja de higo', 'Bergamota'], ['Leche de higo', 'Jazmín'], ['Cedro', 'Almizcle']], sizes: ml(390, 1290, 1890) },
+  { id: 'vainilla-papantla', name: 'Vainilla de Papantla', cats: ['ella', 'unisex'], fam: 'gourmand', conc: 'EDP', badge: 'Más vendido', shape: 'round', liquid: '#E9C08A', cap: 'gold', int: 4, dur: 4, desc: 'Vaina de Veracruz curada al sol, con un toque de ron y pera. Dulce sin empalagar.', notes: [['Ron', 'Pera'], ['Vainilla de Papantla', 'Orquídea'], ['Benjuí', 'Sándalo']], sizes: ml(390, 1290, 1850) },
+  { id: 'ambar-nocturno', name: 'Ámbar Nocturno', cats: ['el', 'unisex', 'nicho'], fam: 'ambar', conc: 'Extrait', shape: 'faceted', liquid: '#9C4F1C', cap: 'black', int: 5, dur: 5, desc: 'Especias tostadas y resinas oscuras. Para la noche y los meses fríos.', notes: [['Cardamomo', 'Pimienta rosa'], ['Ámbar', 'Labdano'], ['Vainilla', 'Oud']], sizes: ml(590, 2190, 3290) },
+  { id: 'flor-azahar', name: 'Flor de Azahar', cats: ['ella'], fam: 'floral', conc: 'EDP', badge: 'Nuevo', shape: 'round', liquid: '#F2D27A', cap: 'silver', int: 3, dur: 3, desc: 'Huertos de naranjo en primavera. Blanco, limpio y con un fondo de miel.', notes: [['Neroli', 'Mandarina'], ['Azahar', 'Tuberosa'], ['Almizcle blanco', 'Miel']], sizes: ml(350, 1190, 1690) },
+  { id: 'rosa-damasco', name: 'Rosa de Damasco', cats: ['ella'], fam: 'floral', conc: 'EDP', sale: .15, shape: 'flask', liquid: '#E59AAE', cap: 'gold', int: 4, dur: 4, desc: 'Una rosa jugosa con lichi y un fondo terroso de pachulí.', notes: [['Lichi', 'Pimienta rosa'], ['Rosa damascena', 'Peonía'], ['Pachulí', 'Almizcle']], sizes: ml(420, 1390, 1990) },
+  { id: 'cuero-tabaco', name: 'Cuero y Tabaco', cats: ['el'], fam: 'amaderado', conc: 'EDP', shape: 'tall', liquid: '#7A4A2A', cap: 'wood', int: 4, dur: 5, desc: 'Biblioteca antigua: cuero suave, hoja de tabaco y haba tonka.', notes: [['Azafrán', 'Ciruela'], ['Cuero', 'Hoja de tabaco'], ['Vetiver', 'Haba tonka']], sizes: ml(420, 1450, 2090) },
+  { id: 'sal-marina', name: 'Sal Marina', cats: ['unisex'], fam: 'acuatico', conc: 'EDT', shape: 'tall', liquid: '#8EC5D6', cap: 'silver', int: 2, dur: 3, desc: 'Piel salada después del mar, con toronja y madera flotante.', notes: [['Sal marina', 'Toronja'], ['Salvia', 'Algas'], ['Madera flotante', 'Ambroxan']], sizes: ml(290, 990, 1450) },
+  { id: 'vetiver-humo', name: 'Vetiver Ahumado', cats: ['el', 'nicho'], fam: 'amaderado', conc: 'EDP', shape: 'square', liquid: '#5E6B4E', cap: 'black', int: 5, dur: 5, desc: 'Raíces de vetiver y abedul quemado. Seco, oscuro y elegante.', notes: [['Pimienta negra', 'Elemi'], ['Vetiver de Haití', 'Abedul'], ['Ládano', 'Cedro ahumado']], sizes: ml(520, 1890, 2790) },
+  { id: 'te-blanco', name: 'Té Blanco', cats: ['ella', 'unisex'], fam: 'citrico', conc: 'EDT', sale: .15, shape: 'flask', liquid: '#E8E0B8', cap: 'silver', int: 2, dur: 2, desc: 'Taza de té blanco con limón amarillo. Ligero, para la oficina y el calor.', notes: [['Limón amarillo', 'Bergamota'], ['Té blanco', 'Flor de loto'], ['Almizcle', 'Madera clara']], sizes: ml(260, 890, 1290) },
+  { id: 'set-descubrimiento', name: 'Set de Descubrimiento', cats: ['sets'], fam: null, conc: 'Set', shape: 'set', set: ['#9DBF7A', '#F2D27A', '#7A4A2A', '#8EC5D6', '#E9C08A'], liquid: '#B9A7E8', int: 0, dur: 0, desc: 'Bruma de Higo, Flor de Azahar, Cuero y Tabaco, Sal Marina y Vainilla de Papantla en 10 ml. Incluye cupón de $300 para tu frasco de 50 o 100 ml.', notes: null, sizes: [{ label: '5 × 10 ml', price: 1490 }] },
+  { id: 'set-ambar', name: 'Set Regalo Ámbar', cats: ['sets'], fam: 'ambar', conc: 'Set', shape: 'set', set: ['#9C4F1C', '#E8D8C4'], liquid: '#9C4F1C', int: 5, dur: 5, desc: 'Ámbar Nocturno 50 ml y crema corporal de la misma línea en 200 ml, en caja rígida con moño.', notes: [['Cardamomo', 'Pimienta rosa'], ['Ámbar', 'Labdano'], ['Vainilla', 'Oud']], sizes: [{ label: '50 ml + crema 200 ml', price: 2590 }] }
+];
+const byId = Object.fromEntries(P.map(p => [p.id, p]));
+const money = n => '$' + Math.round(n).toLocaleString('es-MX');
+const priceAt = (p, i) => Math.round(p.sizes[i].price * (1 - (p.sale || 0)) / 10) * 10;
+const defSize = p => p.sizes.length > 1 ? 1 : 0;
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+/* ---------- Frascos en SVG (catálogo) ---------- */
+let uid = 0;
+function bottle(p) {
+  const id = 'b' + (uid++), cap = CAP[p.cap] || CAP.gold;
+  const shapes = { round: '<ellipse cx="80" cy="140" rx="60" ry="64"/>', square: '<rect x="24" y="62" width="112" height="146" rx="14"/>', tall: '<rect x="42" y="56" width="76" height="154" rx="9"/>', flask: '<path d="M54 60H106L134 102V196Q134 208 122 208H38Q26 208 26 196V102Z"/>', faceted: '<path d="M42 60H118L140 92V180L118 208H42L20 180V92Z"/>' };
+  const body = shapes[p.shape] || shapes.square;
+  const capH = p.shape === 'tall' ? 40 : 30, capY = p.shape === 'round' ? 22 : 12;
+  const ini = p.name.split(' ').filter(w => w.length > 2).map(w => w[0]).join('').slice(0, 2);
+  return `<svg viewBox="0 0 160 220" role="img" aria-label="Frasco de ${p.name}"><defs><clipPath id="${id}c">${body}</clipPath>
+    <linearGradient id="${id}l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${p.liquid}" stop-opacity=".8"/><stop offset="1" stop-color="${p.liquid}"/></linearGradient>
+    <linearGradient id="${id}k" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${cap}"/><stop offset=".45" stop-color="#ffffff" stop-opacity=".6"/><stop offset="1" stop-color="${cap}"/></linearGradient></defs>
+    <rect x="68" y="${capY + capH - 4}" width="24" height="${62 - capY - capH + 6}" fill="#ffffff" fill-opacity=".4"/>
+    <g clip-path="url(#${id}c)"><rect width="160" height="220" fill="#ffffff" fill-opacity=".18"/><rect y="88" width="160" height="140" fill="url(#${id}l)"/><rect y="86" width="160" height="4" fill="#ffffff" fill-opacity=".5"/><rect x="34" y="70" width="8" height="130" rx="4" fill="#ffffff" fill-opacity=".5"/></g>
+    <g fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width="1.5">${body}</g>
+    <rect x="52" y="118" width="56" height="40" rx="3" fill="#FBF8F2"/>
+    <text x="80" y="145" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="20" fill="#2A2230">${ini}</text>
+    <rect x="58" y="${capY}" width="44" height="${capH}" rx="4" fill="url(#${id}k)"/></svg>`;
+}
+function bottleSet(colors) {
+  const shapes = ['square', 'round', 'tall', 'flask', 'faceted'], n = colors.length, w = 160;
+  const inner = colors.map((c, i) => {
+    const x = i * w * .78;
+    if (n === 2 && i === 1) return `<g transform="translate(${x} 70)"><rect x="10" y="60" width="140" height="90" rx="14" fill="${c}"/><rect x="4" y="40" width="152" height="30" rx="8" fill="${CAP.gold}"/><rect x="40" y="92" width="80" height="28" rx="3" fill="#FBF8F2"/></g>`;
+    return `<g transform="translate(${x} 0)">${bottle({ name: 'Mini', shape: shapes[i % 5], liquid: c, cap: ['gold', 'silver', 'wood', 'black'][i % 4] }).replace(/<svg[^>]*>|<\/svg>/g, '')}</g>`;
+  }).join('');
+  return `<svg viewBox="0 0 ${(n - 1) * w * .78 + w} 225" role="img" aria-label="Set de frascos">${inner}</svg>`;
+}
+const art = p => p.shape === 'set' ? bottleSet(p.set) : bottle(p);
+
+/* ---------- Película de scroll en 3D ---------- */
+const LINEUP = ['bruma-higo', 'vainilla-papantla', 'rosa-damasco', 'sal-marina', 'ambar-nocturno'];
+const LX = [7, 11, 15, 19, 23];
+const film = $('#film'), beats = $$('.beat');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function fade(t, a, b) {
+  const w = .035; if (t < a - .001 || t > b) return 0;
+  const i = a === 0 ? 1 : Math.min(1, (t - a) / w), o = Math.min(1, (b - t) / w);
+  return Math.max(0, Math.min(i, o));
+}
+let tRaw = 0, tS = 0;
+function readScroll() {
+  const r = film.getBoundingClientRect(), span = r.height - innerHeight;
+  tRaw = span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 0;
+}
+function paintBeats(t) {
+  beats.forEach(b => {
+    const o = fade(t, +b.dataset.a, +b.dataset.b);
+    b.style.opacity = o; b.style.transform = `translateY(${(1 - o) * 24}px)`;
+    b.style.visibility = o > 0 ? 'visible' : 'hidden';
+  });
+  const marks = [0, .18, .36, .63, .87, 1.0001];
+  $$('#progress b').forEach((el, i) => { el.style.width = Math.max(0, Math.min(1, (t - marks[i]) / (marks[i + 1] - marks[i]))) * 100 + '%'; });
+}
+let lastIdx = -1;
+function paintLineLabel(camX) {
+  const idx = Math.max(0, Math.min(4, Math.round((camX - LX[0]) / 4)));
+  if (idx === lastIdx) return; lastIdx = idx;
+  const p = byId[LINEUP[idx]];
+  $('#lineName').textContent = p.name;
+  $('#lineMeta').textContent = `${FAMS[p.fam][0]} · ${p.conc} · desde ${money(priceAt(p, 0))}`;
+  $('#lineDesc').textContent = p.desc;
+}
+
+function initGL() {
+  if (!window.THREE) return false;
+  const canvas = $('#gl');
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' }); } catch (e) { return false; }
+  if (!renderer.getContext()) return false;
+  const BG = 0x0A0910;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = .95;
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(BG);
+  scene.fog = new THREE.FogExp2(0x0E0B16, 0.032);
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 300);
+
+  // Entorno de estudio para reflejos del vidrio
+  const pm = new THREE.PMREMGenerator(renderer);
+  const env = new THREE.Scene();
+  const box = new THREE.Mesh(new THREE.BoxGeometry(40, 40, 40), new THREE.MeshBasicMaterial({ color: 0x0c0a14, side: THREE.BackSide }));
+  env.add(box);
+  [[0xFFE2B8, 6, [8, 10, 6], [12, 8]], [0xB9A7E8, 3, [-10, 4, -4], [6, 14]], [0xffffff, 4, [0, 14, -10], [18, 4]], [0xE8A54B, 2.5, [-6, -2, 10], [10, 3]]].forEach(([c, i, pos, s]) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(s[0], s[1]), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(i), side: THREE.DoubleSide }));
+    m.position.set(...pos); m.lookAt(0, 0, 0); env.add(m);
+  });
+  scene.environment = pm.fromScene(env, 0.04).texture;
+
+  scene.add(new THREE.HemisphereLight(0xB9A7E8, 0x0A0910, .5));
+  const key = new THREE.DirectionalLight(0xFFE2B8, 1.6); key.position.set(5, 8, 6); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xB9A7E8, 1.6); rim.position.set(-6, 4, -6); scene.add(rim);
+  const glow = new THREE.PointLight(0xE8A54B, 2.5, 10, 2); glow.position.set(0, .8, 1.5); scene.add(glow);
+
+  // Piso reflejante
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(80, 64), new THREE.MeshStandardMaterial({ color: 0x0D0B14, roughness: .6, metalness: .25 }));
+  floor.rotation.x = -Math.PI / 2; scene.add(floor);
+
+  // Fábrica de frascos
+  function labelTex(name) {
+    const c = document.createElement('canvas'); c.width = 320; c.height = 400; const g = c.getContext('2d');
+    g.fillStyle = '#FBF8F2'; g.fillRect(0, 0, 320, 400);
+    g.strokeStyle = '#2A2230'; g.lineWidth = 2; g.strokeRect(14, 14, 292, 372);
+    g.fillStyle = '#2A2230'; g.textAlign = 'center';
+    g.font = '500 20px "DM Mono", monospace'; g.fillText('ATELIER NIMBO', 160, 70);
+    g.font = 'italic 64px "Instrument Serif", Georgia, serif';
+    const words = name.split(' '); const lines = words.length > 2 ? [words.slice(0, -1).join(' '), words.at(-1)] : words;
+    lines.forEach((l, i) => g.fillText(l, 160, 190 + i * 66 - (lines.length - 1) * 33));
+    g.font = '500 18px "DM Mono", monospace'; g.fillText('GUADALAJARA · MX', 160, 345);
+    const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = 4; return t;
+  }
+  const glass = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0, roughness: .04, transmission: 1, thickness: .5, ior: 1.5, clearcoat: 1, clearcoatRoughness: .04, envMapIntensity: 1.4, specularIntensity: 1 });
+  function makeBottle(p) {
+    const g = new THREE.Group();
+    const S = {
+      faceted: [new THREE.CylinderGeometry(.78, .78, 1.8, 8), .9, new THREE.CylinderGeometry(.68, .68, 1.5, 8), .8, 1.8, .79],
+      square: [new THREE.BoxGeometry(1.45, 1.8, .72), .9, new THREE.BoxGeometry(1.29, 1.5, .58), .8, 1.8, .37],
+      round: [new THREE.SphereGeometry(.98, 48, 32), .98, new THREE.SphereGeometry(.86, 48, 32), .9, 1.96, .99],
+      tall: [new THREE.CylinderGeometry(.52, .52, 2.3, 48), 1.15, new THREE.CylinderGeometry(.44, .44, 2, 48), 1.05, 2.3, .53],
+      flask: [new THREE.CylinderGeometry(.46, .86, 1.75, 48), .875, new THREE.CylinderGeometry(.44, .76, 1.45, 48), .78, 1.75, .66]
+    }[p.shape];
+    const [bg, by, lg, ly, h, front] = S;
+    const body = new THREE.Mesh(bg, glass); body.position.y = by; g.add(body);
+    const liquid = new THREE.Mesh(lg, new THREE.MeshStandardMaterial({ color: p.liquid, roughness: .3, metalness: 0, envMapIntensity: .45, emissive: new THREE.Color(p.liquid), emissiveIntensity: .07 }));
+    liquid.position.y = ly; if (p.shape === 'round') liquid.scale.y = .78; g.add(liquid);
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(.17, .17, .26, 24), glass); neck.position.y = h + .12; g.add(neck);
+    const capMat = new THREE.MeshStandardMaterial({ color: CAP[p.cap], metalness: p.cap === 'wood' ? .1 : 1, roughness: p.cap === 'wood' ? .55 : .22 });
+    const cap = new THREE.Mesh(p.shape === 'faceted' ? new THREE.CylinderGeometry(.36, .36, .62, 8) : new THREE.CylinderGeometry(.33, .33, .58, 40), capMat);
+    cap.position.y = h + .54; g.add(cap);
+    const lab = new THREE.Mesh(new THREE.PlaneGeometry(.62, .78), new THREE.MeshStandardMaterial({ map: labelTex(p.name), roughness: .7 }));
+    lab.position.set(0, by * (p.shape === 'round' ? 1 : .92), front + .012); g.add(lab);
+    return g;
+  }
+  const hero = makeBottle(byId['copal-sagrado']); hero.scale.setScalar(1.25); scene.add(hero);
+  const lineup = LINEUP.map((id, i) => { const b = makeBottle(byId[id]); b.position.x = LX[i]; b.rotation.y = -.3; scene.add(b); return b; });
+
+  // Nubes
+  const soft = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.4, 'rgba(255,255,255,.45)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
+  const clouds = new THREE.Group(); scene.add(clouds);
+  const cloudMats = [];
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 170; i++) {
+    const m = new THREE.SpriteMaterial({ map: soft, color: new THREE.Color().setHSL(.71 + rnd() * .07, .45, .5 + rnd() * .16), transparent: true, opacity: .07 + rnd() * .12, depthWrite: false });
+    cloudMats.push([m, m.opacity]);
+    const s = new THREE.Sprite(m);
+    const z = 12 + rnd() * 70, spread = 4 + (z - 12) * .35;
+    s.position.set((rnd() - .5) * spread * 2.2, -1 + rnd() * 7, z);
+    s.scale.setScalar(5 + rnd() * 9); clouds.add(s);
+  }
+  // Partículas de notas
+  function cloudOf(n, color, size, rMin, rMax, yMin, yMax) {
+    const geo = new THREE.BufferGeometry(), pos = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { const a = rnd() * Math.PI * 2, r = rMin + rnd() * (rMax - rMin); pos[i * 3] = Math.cos(a) * r; pos[i * 3 + 1] = yMin + rnd() * (yMax - yMin); pos[i * 3 + 2] = Math.sin(a) * r; }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const mat = new THREE.PointsMaterial({ map: soft, color, size, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true });
+    const pts = new THREE.Points(geo, mat); scene.add(pts); return pts;
+  }
+  const notesP = [cloudOf(260, 0xF2D27A, .09, 1.4, 2.6, .4, 3.2), cloudOf(180, 0xEDE7F5, .32, 1.0, 2.4, .6, 4.2), cloudOf(240, 0xE8A54B, .14, 1.6, 2.8, 0, 1.6)];
+  const dust = cloudOf(500, 0xB9A7E8, .05, 2, 26, 0, 8); dust.material.opacity = .5; dust.position.x = 10;
+
+  // Recorrido de cámara: [t, posición, mira, distancia extra en vertical]
+  const K = [
+    [0, [0, 1.8, 62], [0, 1.6, 0], 1],
+    [.17, [0, 1.9, 12.5], [0, 1.6, 0], 1.3],
+    [.34, [4.8, 2.7, 7.8], [0, 1.6, 0], 1.35],
+    [.47, [-4.6, 1.2, 6.4], [0, 1.8, 0], 1.35],
+    [.6, [3.8, 3.7, 8.4], [0, 1.5, 0], 1.35],
+    [.66, [7, 1.7, 7.2], [7, 1.3, 0], 1.3],
+    [.84, [23, 1.7, 7.2], [23, 1.3, 0], 1.3],
+    [1, [11.5, 5.5, 22], [11.5, 1.1, 0], 2.4]
+  ];
+  const ease = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+  const v = new THREE.Vector3(), lk = new THREE.Vector3(), tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
+  function camAt(t, aspect) {
+    let i = 0; while (i < K.length - 2 && t > K[i + 1][0]) i++;
+    const a = K[i], b = K[i + 1], u = ease(Math.min(1, Math.max(0, (t - a[0]) / (b[0] - a[0]))));
+    const port = aspect < 1;
+    const fa = port ? a[3] : 1, fb = port ? b[3] : 1;
+    tmpA.fromArray(a[1]).sub(lk.fromArray(a[2])).multiplyScalar(fa).add(lk);
+    tmpB.fromArray(b[1]).sub(lk.fromArray(b[2])).multiplyScalar(fb).add(lk);
+    v.lerpVectors(tmpA, tmpB, u);
+    lk.lerpVectors(tmpA.fromArray(a[2]), tmpB.fromArray(b[2]), u);
+    if (port) { v.y -= .9; lk.y -= .9; }
+  }
+
+  function resize() {
+    const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w / h < 1 ? 50 : 35; camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize); resize();
+
+  let visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { rootMargin: '100px' }).observe($('#stage'));
+  const clock = new THREE.Clock();
+  function frame() {
+    requestAnimationFrame(frame);
+    const dt = Math.min(.1, clock.getDelta()), time = clock.elapsedTime;
+    readScroll();
+    tS = reduce ? tRaw : tS + (tRaw - tS) * (1 - Math.exp(-dt * 6));
+    paintBeats(tS);
+    if (!visible) return;
+    camAt(tS, camera.aspect);
+    camera.position.copy(v); camera.position.y += Math.sin(time * .6) * .04; camera.lookAt(lk);
+    paintLineLabel(v.x);
+    hero.rotation.y = tS * Math.PI * 2.4 + time * .12;
+    lineup.forEach((b, i) => { b.rotation.y = -.35 + Math.sin(time * .4 + i) * .25; b.position.y = Math.sin(time * .8 + i) * .03; });
+    // Las nubes se abren conforme avanzas
+    const cf = Math.max(0, 1 - tS / .2);
+    cloudMats.forEach(([m, o]) => m.opacity = o * (.25 + .75 * cf));
+    clouds.rotation.z = Math.sin(time * .05) * .02;
+    const win = [[.34, .47], [.43, .56], [.51, .64]];
+    notesP.forEach((pts, i) => {
+      const [a, b] = win[i], o = tS < a || tS > b ? 0 : Math.min(1, (tS - a) / .03, (b - tS) / .03);
+      pts.material.opacity = o * (i === 1 ? .5 : .9);
+      pts.rotation.y += dt * (i === 1 ? .08 : .25) * (i % 2 ? -1 : 1);
+      if (i === 1) pts.position.y = (time * .15) % 1 - .3;
+    });
+    dust.rotation.y += dt * .01;
+    glow.intensity = 1.5 + Math.sin(time * 1.4) * .4 + (tS > .3 && tS < .62 ? 1.5 : 0);
+    renderer.render(scene, camera);
+  }
+  frame();
+  return true;
+}
+function startFilm() {
+  let ok = false;
+  try { ok = initGL(); } catch (e) { ok = false; }
+  if (!ok) {
+    film.classList.add('nogl');
+    $('#noglArt').innerHTML = bottle(byId['copal-sagrado']);
+    paintLineLabel(LX[0]);
+    beats.forEach(b => { b.style.opacity = 1; b.style.visibility = 'visible'; });
+  }
+}
+paintBeats(0); paintLineLabel(LX[0]);
+(document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))]) : Promise.resolve()).then(startFilm);
+
+/* ---------- Tienda ---------- */
+const store = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const S = { cart: store.get('nimbo-cart', []).filter(l => byId[l.id] && byId[l.id].sizes[l.i]), wish: new Set(store.get('nimbo-wish', [])), f: { cat: 'all', fams: new Set(), conc: '', max: 99999, q: '', sort: 'rel' }, coupon: null, ship: 'std', pay: 'card', step: 1, msi: '1' };
+const COUPONS = { BIENVENIDA10: { type: 'pct', v: .10, label: '10 % de bienvenida' }, NIMBO200: { type: 'amt', v: 200, min: 1500, label: '$200 en compras desde $1,500' } };
+const SHIP = { std: { name: 'Envío estándar', eta: '3 a 5 días hábiles', cost: 129 }, exp: { name: 'Envío express', eta: '1 a 2 días hábiles', cost: 249 }, pick: { name: 'Recoger en tienda', eta: 'Listo en 2 horas · Col. Americana, GDL', cost: 0 } };
+const FREE = 1499;
+
+let tt; function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => t.hidden = true, 2600); }
+const stack = [];
+function openOv(id) { const o = $('#' + id); o.hidden = false; stack.push(o); document.body.classList.add('locked'); const f = o.querySelector('[data-close]'); f && f.focus({ preventScroll: true }); }
+function closeOv(o) { o = o || stack[stack.length - 1]; if (!o) return; o.hidden = true; stack.splice(stack.indexOf(o), 1); if (!stack.length) document.body.classList.remove('locked'); }
+$$('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeOv(o); }));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && stack.length) closeOv(); });
+function go(id) { stack.slice().forEach(o => closeOv(o)); document.getElementById(id).scrollIntoView({ block: 'start' }); }
+
+function renderCats() {
+  const rep = { ella: 'rosa-damasco', el: 'cuero-tabaco', unisex: 'bruma-higo', nicho: 'copal-sagrado', sets: 'set-ambar' };
+  $('#cats').innerHTML = Object.entries(CATS).map(([k, v]) => { const p = byId[rep[k]], n = P.filter(x => x.cats.includes(k)).length;
+    return `<button class="cat" data-cat="${k}" style="--tint:${p.liquid}"><div class="art">${art(p)}</div><b>${v}</b><span>${n} ${n === 1 ? 'producto' : 'productos'}</span></button>`; }).join('');
+}
+function renderSeg() { $('#seg').innerHTML = [['all', 'Todos'], ...Object.entries(CATS)].map(([k, v]) => `<button data-seg="${k}" aria-pressed="${S.f.cat === k}">${v}</button>`).join(''); }
+function renderFams() { $('#fams').innerHTML = Object.entries(FAMS).map(([k, [n, c]]) => `<button class="chip" data-fam="${k}" aria-pressed="${S.f.fams.has(k)}" style="--dot:${c}"><i></i>${n}</button>`).join(''); }
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+function filtered() {
+  const f = S.f, q = norm(f.q.trim());
+  const list = P.filter(p => (f.cat === 'all' || p.cats.includes(f.cat)) && (!f.fams.size || f.fams.has(p.fam)) && (!f.conc || f.conc === p.conc) && priceAt(p, defSize(p)) <= f.max &&
+    (!q || norm([p.name, p.desc, (p.notes || []).flat().join(' '), FAMS[p.fam]?.[0] || ''].join(' ')).includes(q)));
+  const pr = p => priceAt(p, defSize(p));
+  if (f.sort === 'asc') list.sort((a, b) => pr(a) - pr(b));
+  if (f.sort === 'desc') list.sort((a, b) => pr(b) - pr(a));
+  if (f.sort === 'az') list.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  return list;
+}
+const heart = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
+const plus = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>';
+function card(p) {
+  const i = defSize(p), sale = p.sale ? `<s>${money(p.sizes[i].price)}</s>` : '';
+  const badge = p.sale ? `<span class="badge sale">−${p.sale * 100} %</span>` : p.badge ? `<span class="badge">${p.badge}</span>` : '';
+  return `<article class="card" style="--tint:${p.liquid}"><button class="art" data-open-product="${p.id}" aria-label="Ver ${p.name}">${art(p)}</button>${badge}
+    <button class="icon-btn wish" data-wish="${p.id}" aria-pressed="${S.wish.has(p.id)}" aria-label="Guardar ${p.name} en favoritos">${heart}</button>
+    <div class="body"><span class="meta">${p.fam && p.conc !== 'Set' ? FAMS[p.fam][0] + ' · ' + p.conc : 'Set de regalo'}</span><h3>${p.name}</h3><p class="notes">${p.notes ? p.notes.map(n => n[0]).join(' · ') : p.sizes[0].label}</p>
+    <div class="foot"><span class="price">${money(priceAt(p, i))}${sale} <small>${p.sizes[i].label}</small></span><button class="add" data-add="${p.id}" aria-label="Agregar ${p.name} al carrito">${plus}</button></div></div></article>`;
+}
+function renderGrid() {
+  const list = filtered();
+  $('#resCount').textContent = `${list.length} ${list.length === 1 ? 'perfume' : 'perfumes'}`;
+  $('#grid').innerHTML = list.length ? list.map(card).join('') : '<div class="empty"><p>No hay perfumes con esos filtros.</p><button class="btn btn-ghost" id="clearF">Quitar filtros</button></div>';
+  const c = $('#clearF'); if (c) c.onclick = () => { S.f = { ...S.f, cat: 'all', fams: new Set(), conc: '', max: 99999, q: '' }; $('#q').value = $('#qm').value = ''; $('#fConc').value = ''; $('#fMax').value = '99999'; renderSeg(); renderFams(); renderGrid(); };
+}
+$('#fConc').onchange = e => { S.f.conc = e.target.value; renderGrid(); };
+$('#fMax').onchange = e => { S.f.max = +e.target.value; renderGrid(); };
+$('#sort').onchange = e => { S.f.sort = e.target.value; renderGrid(); };
+
+let pdSize = 1, pdQty = 1;
+function openProduct(id) {
+  const p = byId[id]; pdSize = defSize(p); pdQty = 1;
+  const tiers = ['Salida', 'Corazón', 'Fondo'];
+  const dots = n => `<div class="dots">${[1, 2, 3, 4, 5].map(k => `<i class="${k <= n ? 'on' : ''}"></i>`).join('')}</div>`;
+  const durTxt = { EDT: '3 a 5 h', EDP: '6 a 8 h', Extrait: 'más de 10 h' }[p.conc];
+  $('#productBody').innerHTML = `<div class="pd" style="--tint:${p.liquid}"><div class="art">${art(p)}</div><div class="info">
+    <span class="eyebrow">${p.fam && p.conc !== 'Set' ? FAMS[p.fam][0] + ' · ' + p.conc : 'Set de regalo'}${p.cats.filter(c => c !== 'sets').map(c => ' · ' + CATS[c]).join('')}</span>
+    <h2>${p.name}</h2><p class="desc">${p.desc}</p>
+    ${p.notes ? `<div class="pyr">${p.notes.map((n, i) => `<div><span class="eyebrow">${tiers[i]}</span><br>${n.join(', ')}</div>`).join('')}</div>` : ''}
+    ${p.int ? `<div class="meters"><div>Intensidad${dots(p.int)}</div><div>Duración${durTxt ? ' · ' + durTxt : ''}${dots(p.dur)}</div></div>` : ''}
+    <div><span class="eyebrow">Presentación</span><div class="sizes" id="pdSizes" style="margin-top:8px"></div></div>
+    <div class="buy-row"><div class="qty"><button id="pdMinus" aria-label="Quitar uno">−</button><span id="pdQty">1</span><button id="pdPlus" aria-label="Agregar uno">+</button></div><button class="btn btn-primary" id="pdAdd"></button>
+    <button class="icon-btn" style="border:1px solid var(--line)" data-wish="${p.id}" aria-pressed="${S.wish.has(p.id)}" aria-label="Guardar en favoritos">${heart}</button></div>
+    <p class="hint">Incluye muestra de 2 ml de regalo · Envío gratis desde ${money(FREE)}</p></div></div>`;
+  const draw = () => {
+    $('#pdSizes').innerHTML = p.sizes.map((s, i) => `<button class="size" data-size="${i}" aria-pressed="${i === pdSize}"><b>${s.label}</b>${money(priceAt(p, i))}${p.sale ? ` <s>${money(s.price)}</s>` : ''}</button>`).join('');
+    $('#pdQty').textContent = pdQty; $('#pdAdd').textContent = `Agregar al carrito · ${money(priceAt(p, pdSize) * pdQty)}`;
+  };
+  draw();
+  $('#pdSizes').onclick = e => { const b = e.target.closest('[data-size]'); if (b) { pdSize = +b.dataset.size; draw(); } };
+  $('#pdMinus').onclick = () => { pdQty = Math.max(1, pdQty - 1); draw(); };
+  $('#pdPlus').onclick = () => { pdQty = Math.min(10, pdQty + 1); draw(); };
+  $('#pdAdd').onclick = () => { addToCart(p.id, pdSize, pdQty); closeOv($('#productOv')); };
+  if ($('#productOv').hidden) openOv('productOv');
+}
+
+function saveCart() { store.set('nimbo-cart', S.cart); }
+function addToCart(id, i, qty = 1) {
+  const l = S.cart.find(x => x.id === id && x.i === i);
+  l ? l.qty = Math.min(10, l.qty + qty) : S.cart.push({ id, i, qty });
+  saveCart(); renderCart(); toast(`${byId[id].name} · ${byId[id].sizes[i].label} agregado al carrito`);
+}
+function totals() {
+  const sub = S.cart.reduce((a, l) => a + priceAt(byId[l.id], l.i) * l.qty, 0);
+  const c = S.coupon && COUPONS[S.coupon];
+  const disc = !c ? 0 : c.type === 'pct' ? Math.round(sub * c.v) : (sub >= c.min ? c.v : 0);
+  const after = sub - disc;
+  const ship = !S.cart.length || S.ship === 'pick' ? 0 : S.ship === 'exp' ? SHIP.exp.cost : (after >= FREE ? 0 : SHIP.std.cost);
+  return { sub, disc, after, ship, total: after + ship };
+}
+function lineHTML(l, edit) {
+  const p = byId[l.id];
+  return `<div class="line" style="--tint:${p.liquid}"><div class="thumb">${art(p)}</div><div style="min-width:0"><b>${p.name}</b><small>${p.sizes[l.i].label}${edit ? '' : ' · × ' + l.qty}</small>
+    ${edit ? `<div style="margin-top:6px;display:flex;align-items:center"><div class="qty"><button data-q="-1" data-k="${l.id}|${l.i}" aria-label="Quitar uno">−</button><span>${l.qty}</span><button data-q="1" data-k="${l.id}|${l.i}" aria-label="Agregar uno">+</button></div><button class="rm" data-rm="${l.id}|${l.i}">Quitar</button></div>` : ''}</div>
+    <span class="price">${money(priceAt(p, l.i) * l.qty)}</span></div>`;
+}
+function totalsHTML(t, named) {
+  const c = S.coupon && COUPONS[S.coupon];
+  return `<div class="totals"><div><span>Subtotal</span><span class="mono">${money(t.sub)}</span></div>
+    ${t.disc ? `<div class="disc"><span>Cupón ${S.coupon}</span><span class="mono">−${money(t.disc)}</span></div>` : ''}
+    ${c && !t.disc ? `<div class="hint"><span>${S.coupon} aplica en compras desde ${money(c.min)}</span></div>` : ''}
+    <div><span>${named ? SHIP[S.ship].name : 'Envío estimado'}</span><span class="mono">${t.ship ? money(t.ship) : 'Gratis'}</span></div>
+    <div class="grand"><span>Total</span><span class="mono">${money(t.total)} MXN</span></div></div>`;
+}
+function renderCart() {
+  const n = S.cart.reduce((a, l) => a + l.qty, 0);
+  $('#cartCount').textContent = n || ''; $('#cartCount').dataset.n = n;
+  $('#wishCount').textContent = S.wish.size || ''; $('#wishCount').dataset.n = S.wish.size;
+  if (!S.cart.length) { $('#cartBody').innerHTML = `<div class="cart-empty"><strong>Tu carrito está vacío</strong><p>Agrega un perfume o empieza con el set de descubrimiento.</p><button class="btn btn-primary" data-go="coleccion">Ver la colección</button></div>`; $('#cartFoot').innerHTML = ''; return; }
+  const t = totals(), left = Math.max(0, FREE - t.after);
+  $('#cartBody').innerHTML = `<div class="ship-bar">${left ? `Te faltan <b>${money(left)}</b> para el envío gratis` : '<b>Tienes envío estándar gratis</b>'}<div class="track"><i style="width:${Math.min(100, t.after / FREE * 100)}%"></i></div></div>` + S.cart.map(l => lineHTML(l, true)).join('');
+  $('#cartFoot').innerHTML = `<form class="coupon" id="couponForm"><input id="couponIn" placeholder="Código de descuento" aria-label="Código de descuento" value="${S.coupon || ''}"><button class="btn btn-ghost" type="submit">Aplicar</button></form>
+    <p class="hint">Prueba BIENVENIDA10 o NIMBO200</p>${totalsHTML(t)}<button class="btn btn-primary btn-block" id="toCheckout">Continuar al pago</button><button class="btn btn-ghost btn-block" data-close>Seguir comprando</button>`;
+  $('#couponForm').onsubmit = e => { e.preventDefault(); const v = $('#couponIn').value.trim().toUpperCase();
+    if (!v) S.coupon = null; else if (COUPONS[v]) { S.coupon = v; toast('Cupón aplicado: ' + COUPONS[v].label); } else toast('Ese código no existe. Revisa que esté bien escrito.');
+    renderCart(); };
+  $('#toCheckout').onclick = () => { closeOv($('#cartOv')); openCheckout(); };
+}
+$('#cartBody').addEventListener('click', e => {
+  const q = e.target.closest('[data-q]'), rm = e.target.closest('[data-rm]');
+  const find = k => { const [id, i] = k.split('|'); return S.cart.findIndex(l => l.id === id && l.i === +i); };
+  if (q) { const ix = find(q.dataset.k); S.cart[ix].qty += +q.dataset.q; if (S.cart[ix].qty < 1) S.cart.splice(ix, 1); else S.cart[ix].qty = Math.min(10, S.cart[ix].qty); }
+  else if (rm) S.cart.splice(find(rm.dataset.rm), 1); else return;
+  saveCart(); renderCart();
+});
+function renderWish() {
+  const list = [...S.wish].filter(id => byId[id]);
+  $('#wishBody').innerHTML = list.length ? list.map(id => { const p = byId[id], i = defSize(p);
+    return `<div class="line" style="--tint:${p.liquid}"><div class="thumb">${art(p)}</div><div style="min-width:0"><b>${p.name}</b><small>${p.sizes[i].label} · ${money(priceAt(p, i))}</small><div style="margin-top:6px"><button class="rm" style="margin:0" data-wish="${id}">Quitar de favoritos</button></div></div><button class="add" data-add="${id}" aria-label="Agregar ${p.name} al carrito">${plus}</button></div>`; }).join('')
+    : '<div class="cart-empty"><strong>Aún no guardas favoritos</strong><p>Toca el corazón de cualquier perfume para guardarlo aquí.</p></div>';
+}
+function toggleWish(id) {
+  S.wish.has(id) ? S.wish.delete(id) : S.wish.add(id); store.set('nimbo-wish', [...S.wish]);
+  $$(`[data-wish="${id}"][aria-pressed]`).forEach(b => b.setAttribute('aria-pressed', S.wish.has(id)));
+  renderCart(); if (!$('#wishOv').hidden) renderWish();
+  toast(S.wish.has(id) ? 'Guardado en favoritos' : 'Quitado de favoritos');
+}
+
+const PAYS = [
+  { k: 'card', n: 'Tarjeta de crédito o débito', d: 'Visa, Mastercard y American Express. Hasta 12 meses sin intereses.', ico: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/>' },
+  { k: 'paypal', n: 'PayPal', d: 'Paga con tu saldo o las tarjetas guardadas en PayPal.', ico: '<path d="M8 20l1.5-9h5a4 4 0 0 0 0-8H9L6 20"/><path d="M10 15h3a4 4 0 0 0 4-3.5"/>' },
+  { k: 'mp', n: 'Mercado Pago', d: 'Saldo, tarjetas o Mercado Crédito, a meses sin tarjeta.', ico: '<circle cx="12" cy="12" r="8"/><path d="M8 12c1.5-2 2.5-2 4 0s2.5 2 4 0"/>' },
+  { k: 'oxxo', n: 'Efectivo en OXXO', d: 'Genera una referencia y paga en cualquier tienda. Vence en 48 h.', ico: '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10h8M8 14h5"/>' },
+  { k: 'spei', n: 'Transferencia SPEI', d: 'Desde la app de tu banco. Se confirma en minutos.', ico: '<path d="M4 10h16L12 4zM6 10v7M10 10v7M14 10v7M18 10v7M4 20h16"/>' },
+  { k: 'cod', n: 'Pago contra entrega', d: 'Efectivo o tarjeta al recibir. Solo zona metropolitana de Guadalajara.', ico: '<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>' }
+];
+$('#pays').innerHTML = PAYS.map(p => `<div class="pay"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${p.ico}</svg></div><div><b>${p.n}</b><p>${p.d}</p></div></div>`).join('');
+
+const ship = {};
+function openCheckout() { if (!S.cart.length) { toast('Agrega al menos un perfume para continuar'); return; } S.step = 1; renderCheckout(); openOv('checkoutOv'); }
+const stepper = () => `<ol class="stepper">${['Envío', 'Pago', 'Confirmación'].map((s, i) => `<li class="${i < S.step ? 'on' : ''}">${i + 1}. ${s}</li>`).join('')}</ol>`;
+function renderSide() { $('#coSide').innerHTML = `<h3>Resumen del pedido</h3>${S.cart.map(l => lineHTML(l, false)).join('')}<p class="hint">+ muestra de 2 ml de regalo</p>${totalsHTML(totals(), true)}`; }
+function renderCheckout() {
+  const m = $('#coMain');
+  if (S.step === 1) {
+    const st = ['Jalisco', 'Ciudad de México', 'Nuevo León', 'Estado de México', 'Puebla', 'Querétaro', 'Yucatán', 'Otro'];
+    const val = k => (ship[k] || '').replace(/"/g, '&quot;');
+    m.innerHTML = `${stepper()}<h2>Datos de envío</h2><form class="form" id="shipForm">
+      <div class="field full"><label for="sName">Nombre completo</label><input id="sName" required autocomplete="name" value="${val('name')}"></div>
+      <div class="field"><label for="sMail">Correo</label><input id="sMail" type="email" required autocomplete="email" value="${val('mail')}"></div>
+      <div class="field"><label for="sTel">Teléfono</label><input id="sTel" type="tel" required pattern="[0-9 ]{10,14}" placeholder="10 dígitos" autocomplete="tel" value="${val('tel')}"></div>
+      <div class="field full"><label for="sStreet">Calle y número</label><input id="sStreet" required autocomplete="street-address" value="${val('street')}"></div>
+      <div class="field"><label for="sCol">Colonia</label><input id="sCol" required value="${val('col')}"></div>
+      <div class="field"><label for="sCp">Código postal</label><input id="sCp" required inputmode="numeric" pattern="[0-9]{5}" placeholder="5 dígitos" autocomplete="postal-code" value="${val('cp')}"></div>
+      <div class="field"><label for="sCity">Ciudad</label><input id="sCity" required autocomplete="address-level2" value="${val('city')}"></div>
+      <div class="field"><label for="sState">Estado</label><select id="sState">${st.map(s => `<option ${ship.state === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+      <div class="field full"><span>Método de entrega</span><div class="opts" id="shipOpts">${Object.entries(SHIP).map(([k, s]) => { const c = k === 'std' && totals().after >= FREE ? 0 : s.cost;
+        return `<label class="opt"><input type="radio" name="ship" value="${k}" ${S.ship === k ? 'checked' : ''}><div><b>${s.name}</b><span>${s.eta}</span></div><span class="amt">${c ? money(c) : 'Gratis'}</span></label>`; }).join('')}</div></div>
+      <div class="field full co-nav"><button type="button" class="btn btn-ghost" data-close>Volver a la tienda</button><button class="btn btn-primary" type="submit">Continuar al pago</button></div></form>`;
+    $('#shipOpts').onchange = e => { S.ship = e.target.value; renderSide(); };
+    $('#shipForm').onsubmit = e => { e.preventDefault();
+      Object.assign(ship, { name: $('#sName').value, mail: $('#sMail').value, tel: $('#sTel').value, street: $('#sStreet').value, col: $('#sCol').value, cp: $('#sCp').value, city: $('#sCity').value, state: $('#sState').value });
+      S.step = 2; renderCheckout(); $('#checkoutOv .modal').scrollTop = 0; };
+  } else if (S.step === 2) {
+    m.innerHTML = `${stepper()}<h2>Forma de pago</h2><form id="payForm" style="display:flex;flex-direction:column;gap:14px">
+      <div class="opts" id="payOpts">${PAYS.map(p => `<label class="opt"><input type="radio" name="pay" value="${p.k}" ${S.pay === p.k ? 'checked' : ''}><div><b>${p.n}</b><span>${p.d}</span></div></label>`).join('')}</div>
+      <div class="pay-detail" id="payDetail"></div>
+      <div class="co-nav"><button type="button" class="btn btn-ghost" id="backShip">Volver a envío</button><button class="btn btn-primary" type="submit" id="payBtn"></button></div></form>`;
+    const detail = () => {
+      const t = totals(), d = $('#payDetail'), msiOk = t.total >= 1200;
+      if (S.pay === 'card') d.innerHTML = `<div class="form">
+        <div class="field full"><label for="ccNum">Número de tarjeta</label><input id="ccNum" required inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="19" pattern="[0-9 ]{15,19}"></div>
+        <div class="field full"><label for="ccName">Nombre en la tarjeta</label><input id="ccName" required autocomplete="cc-name"></div>
+        <div class="field"><label for="ccExp">Vencimiento</label><input id="ccExp" required placeholder="MM/AA" maxlength="5" pattern="(0[1-9]|1[0-2])/[0-9]{2}" autocomplete="cc-exp"></div>
+        <div class="field"><label for="ccCvv">CVV</label><input id="ccCvv" required inputmode="numeric" maxlength="4" pattern="[0-9]{3,4}" autocomplete="cc-csc"></div>
+        <div class="field full"><label for="ccMsi">Plazo</label><select id="ccMsi">${[['1', 'Una sola exhibición'], ['3', '3 meses sin intereses'], ['6', '6 meses sin intereses'], ['12', '12 meses sin intereses']].map(([v, n]) => `<option value="${v}" ${v !== '1' && !msiOk ? 'disabled' : ''} ${S.msi === v ? 'selected' : ''}>${n}${v !== '1' ? ' · ' + money(t.total / +v) + ' al mes' : ''}</option>`).join('')}</select></div>
+        </div><p class="hint">${msiOk ? 'Meses sin intereses con tarjetas de crédito participantes.' : 'Los meses sin intereses aplican desde $1,200.'} Demostración: no se guarda ningún dato.</p>`;
+      else if (S.pay === 'paypal' || S.pay === 'mp') d.innerHTML = `<p>Al confirmar, en la web real te llevaríamos a ${S.pay === 'paypal' ? 'PayPal' : 'Mercado Pago'} para autorizar ${money(t.total)} y volverías aquí con tu pedido confirmado.</p>`;
+      else if (S.pay === 'oxxo') d.innerHTML = `<p>Al confirmar generamos tu referencia. Tienes 48 horas para pagar ${money(t.total)} en cualquier OXXO; enviamos tu pedido cuando se acredite.</p>`;
+      else if (S.pay === 'spei') d.innerHTML = `<p>Al confirmar te mostramos la CLABE y la referencia. Tu pedido se envía cuando recibimos la transferencia, normalmente en minutos.</p>`;
+      else d.innerHTML = ship.state === 'Jalisco' ? `<p>Paga ${money(t.total)} en efectivo o con tarjeta al repartidor.</p>` : `<p style="color:var(--danger)">El pago contra entrega solo está disponible en la zona metropolitana de Guadalajara. Tu dirección está en ${ship.state}; elige otra forma de pago.</p>`;
+      $('#payBtn').textContent = `Confirmar pedido · ${money(t.total)}`;
+      $('#payBtn').disabled = S.pay === 'cod' && ship.state !== 'Jalisco';
+      const n = $('#ccNum'); if (n) n.oninput = () => { n.value = n.value.replace(/\D/g, '').slice(0, 16).replace(/(.{4})(?=.)/g, '$1 '); };
+      const x = $('#ccExp'); if (x) x.oninput = () => { const v = x.value.replace(/\D/g, '').slice(0, 4); x.value = v.length > 2 ? v.slice(0, 2) + '/' + v.slice(2) : v; };
+      const ms = $('#ccMsi'); if (ms) ms.onchange = () => S.msi = ms.value;
+    };
+    detail();
+    $('#payOpts').onchange = e => { S.pay = e.target.value; detail(); };
+    $('#backShip').onclick = () => { S.step = 1; renderCheckout(); };
+    $('#payForm').onsubmit = e => { e.preventDefault(); placeOrder(); };
+  }
+  renderSide();
+}
+function placeOrder() {
+  const t = totals(), num = 'NIM-' + String(Date.now()).slice(-6);
+  const ref = () => Array.from({ length: 4 }, () => String(Math.floor(1000 + Math.random() * 9000))).join(' ');
+  const last4 = (($('#ccNum') || {}).value || '').replace(/\D/g, '').slice(-4) || '0000';
+  const how = { card: `Cargo de ejemplo a tu tarjeta terminación ${last4}${S.msi !== '1' ? ` a ${S.msi} meses sin intereses` : ''}.`, paypal: 'Pago autorizado con PayPal.', mp: 'Pago autorizado con Mercado Pago.',
+    oxxo: `Paga en OXXO con esta referencia antes de 48 horas:<div class="ref">${ref()}</div>`, spei: `Transfiere ${money(t.total)} a esta CLABE de ejemplo con ${num} como concepto:<div class="ref">000 320 0000 0000 0000</div>`, cod: `Paga ${money(t.total)} al recibir tu pedido.` }[S.pay];
+  S.step = 3; renderSide();
+  $('#coMain').innerHTML = `${stepper()}<div class="done"><div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5 9-10"/></svg></div>
+    <h2>¡Gracias, ${(ship.name || '').split(' ')[0]}!</h2><p>Pedido <b class="mono">${num}</b> registrado. Es una demostración y no se cobró nada.</p></div>
+    <div class="pay-detail"><p>${how}</p><p><b>${SHIP[S.ship].name}</b> · ${SHIP[S.ship].eta}${S.ship !== 'pick' ? `<br>${ship.street}, ${ship.col}, ${ship.cp} ${ship.city}, ${ship.state}` : ''}</p><p class="hint">En la web real enviaríamos la confirmación a ${ship.mail}.</p></div>
+    <button class="btn btn-primary" data-close>Volver a la tienda</button>`;
+  S.cart = []; S.coupon = null; saveCart(); renderCart();
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-open-product],[data-add],[data-wish],[data-cat],[data-seg],[data-fam],[data-go],[data-copy],[data-soon]');
+  if (!t) return;
+  const d = t.dataset;
+  if (d.openProduct) openProduct(d.openProduct);
+  else if (d.add) { const p = byId[d.add]; addToCart(p.id, defSize(p)); }
+  else if (d.wish) toggleWish(d.wish);
+  else if (d.cat) { S.f.cat = d.cat; renderSeg(); renderGrid(); go('coleccion'); }
+  else if (d.seg) { S.f.cat = d.seg; renderSeg(); renderGrid(); }
+  else if (d.fam) { S.f.fams.has(d.fam) ? S.f.fams.delete(d.fam) : S.f.fams.add(d.fam); renderFams(); renderGrid(); }
+  else if (d.go) go(d.go);
+  else if (d.copy !== undefined) {
+    const v = d.copy;
+    Promise.resolve().then(() => navigator.clipboard.writeText(v)).then(() => toast('Copiado: ' + v)).catch(() => { const r = document.createRange(); r.selectNodeContents(t.parentElement.querySelector('.val')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Texto seleccionado; cópialo manualmente'); });
+  }
+  else if (d.soon !== undefined) toast('Esta página se agrega en la versión final de la web');
+});
+const onSearch = v => { S.f.q = v; renderGrid(); };
+$('#q').addEventListener('input', e => onSearch(e.target.value));
+$('#q').addEventListener('keydown', e => { if (e.key === 'Enter') go('coleccion'); });
+$('#qm').addEventListener('input', e => { $('#q').value = e.target.value; onSearch(e.target.value); });
+$('#qm').addEventListener('keydown', e => { if (e.key === 'Enter') go('coleccion'); });
+$('#cartBtn').onclick = () => { renderCart(); openOv('cartOv'); };
+$('#wishBtn').onclick = () => { renderWish(); openOv('wishOv'); };
+$('#accountBtn').onclick = () => openOv('accountOv');
+$('#menuBtn').onclick = () => openOv('menuOv');
+$('#waBtn').onclick = () => toast('En la web real abre WhatsApp: 33 1234 5678');
+$$('.tabs button').forEach(b => b.onclick = () => { $$('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b)); const su = b.dataset.tab === 'signup'; $('#aNameF').hidden = !su; $('#aName').required = su; $('#aSubmit').textContent = su ? 'Crear cuenta' : 'Entrar'; });
+$('#accountForm').onsubmit = e => { e.preventDefault(); closeOv($('#accountOv')); toast('Demostración: sesión iniciada sin guardar datos'); };
+$('#contactForm').onsubmit = e => { e.preventDefault(); e.target.reset(); toast('Mensaje listo. En la web real llegaría a hola@tumarca.mx'); };
+$('#newsForm').onsubmit = e => { e.preventDefault(); e.target.reset(); toast('Suscripción de ejemplo: tu código sería BIENVENIDA10'); };
+
+renderCats(); renderSeg(); renderFams(); renderGrid(); renderCart();
+$('#discoverArt').innerHTML = bottleSet(byId['set-descubrimiento'].set);
+})();
+</script>
+
+</body>
+</html>
