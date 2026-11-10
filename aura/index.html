@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURA · Eau de Parfum</title>
+<meta name="description" content="AURA, Eau de Parfum. Vainilla, orquídea y cítricos.">
+<style>
+  :root {
+    --white: #ffffff;
+    --paper: #f5f5f7;
+    --ink: #1d1d1f;
+    --grey: #86868b;
+    --line: #d2d2d7;
+    --black: #000000;
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+            "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--white);
+    color: var(--ink);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  img { display: block; max-width: 100%; }
+
+  h1, h2, h3, p { margin: 0; }
+
+  /* ---------- Barra superior ---------- */
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px clamp(20px, 4vw, 48px);
+    color: #fff;
+    mix-blend-mode: difference; /* se lee sobre blanco y sobre negro */
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .nav strong { font-weight: 600; letter-spacing: 0.32em; }
+  .nav a { color: inherit; text-decoration: none; }
+
+  /* ---------- 1. Hero ---------- */
+  .hero {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: var(--white);
+  }
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    will-change: transform, opacity;
+  }
+  .hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__copy {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 20px;
+    will-change: transform, opacity, filter;
+  }
+  .hero__eyebrow {
+    font-size: clamp(12px, 1.1vw, 15px);
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: clamp(12px, 2vw, 24px);
+    padding-left: 0.42em;
+  }
+  .hero__title {
+    font-size: clamp(84px, 22vw, 340px);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: 0.04em;
+    padding-left: 0.04em;
+  }
+  .hero__lead {
+    margin-top: clamp(16px, 2.4vw, 32px);
+    font-size: clamp(17px, 1.7vw, 24px);
+    color: var(--grey);
+  }
+  .hero__caption {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    bottom: clamp(28px, 6vh, 64px);
+    text-align: center;
+    font-size: clamp(15px, 1.4vw, 19px);
+    color: var(--ink);
+  }
+  .hero__hint {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 28px;
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(var(--ink), transparent);
+    opacity: 0.4;
+  }
+
+  /* ---------- 2. Detalle (sticky / pin) ---------- */
+  .detail {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    background: var(--paper);
+    overflow: hidden;
+  }
+  .detail__grid {
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(24px, 5vw, 80px);
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: clamp(72px, 10vh, 120px) clamp(20px, 5vw, 72px) clamp(32px, 6vh, 72px);
+  }
+  .detail__steps {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 4.2vh, 44px);
+  }
+  .step { will-change: transform, opacity; }
+  .step__kicker {
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 8px;
+  }
+  .step__title {
+    font-size: clamp(26px, 3.4vw, 52px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .step__text {
+    margin-top: 8px;
+    max-width: 30em;
+    font-size: clamp(15px, 1.25vw, 19px);
+    line-height: 1.45;
+    color: #515154;
+  }
+  .detail__media {
+    height: 100%;
+    max-height: 820px;
+    border-radius: clamp(18px, 2.4vw, 36px);
+    overflow: hidden;
+    background: var(--line);
+  }
+  .detail__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+  }
+
+  /* ---------- 3. Ingredientes (parallax) ---------- */
+  .notes {
+    position: relative;
+    min-height: 150vh;
+    background: var(--white);
+    overflow: hidden;
+    perspective: 1400px;
+    display: grid;
+    place-items: center;
+    padding: 18vh clamp(20px, 5vw, 72px);
+  }
+  .notes__word {
+    position: absolute;
+    left: 50%;
+    white-space: nowrap;
+    font-size: clamp(90px, 21vw, 360px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #ececef;
+    translate: -50% 0;
+    user-select: none;
+    will-change: transform;
+  }
+  .notes__word--a { top: 12%; }
+  .notes__word--b { top: 44%; color: transparent; -webkit-text-stroke: 1px var(--line); }
+  .notes__word--c { top: 74%; }
+
+  .notes__media {
+    position: relative;
+    z-index: 2;
+    width: min(1180px, 100%);
+    will-change: transform;
+    transform-style: preserve-3d;
+  }
+  .notes__media img {
+    width: 100%;
+    mix-blend-mode: multiply; /* funde el fondo blanco de la foto con la página */
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 52%, transparent 74%);
+            mask-image: radial-gradient(ellipse at center, #000 52%, transparent 74%);
+  }
+  .notes__head {
+    position: absolute;
+    z-index: 3;
+    top: 9%;
+    left: clamp(20px, 6vw, 96px);
+    max-width: 13em;
+    font-size: clamp(30px, 4.4vw, 68px);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    will-change: transform;
+  }
+  .note {
+    position: absolute;
+    z-index: 3;
+    max-width: 17em;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink);
+    will-change: transform;
+  }
+  .note__name {
+    font-size: clamp(18px, 1.8vw, 26px);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .note__text {
+    margin-top: 6px;
+    font-size: clamp(14px, 1.1vw, 17px);
+    line-height: 1.45;
+    color: #515154;
+  }
+  .note--1 { top: 36%; right: clamp(20px, 6vw, 96px); }
+  .note--2 { top: 62%; left: clamp(20px, 6vw, 96px); }
+  .note--3 { top: 82%; right: clamp(20px, 12vw, 200px); }
+
+  /* ---------- 4. Cierre (revelación) ---------- */
+  .closing {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(20px, 4vh, 40px);
+    padding: clamp(72px, 10vh, 110px) 20px clamp(28px, 5vh, 56px);
+    text-align: center;
+    color: #f5f5f7;
+  }
+  .closing__bg {
+    position: absolute;
+    inset: 0;
+    background: var(--black);
+    will-change: opacity;
+  }
+  .closing > :not(.closing__bg) { position: relative; z-index: 1; }
+  .closing__title {
+    font-size: clamp(34px, 5.6vw, 84px);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+  }
+  .closing__media {
+    width: min(860px, 100%);
+    max-height: 52vh;
+    aspect-ratio: 1408 / 768;
+    border-radius: clamp(16px, 2vw, 30px);
+    overflow: hidden;
+    will-change: transform, opacity;
+  }
+  .closing__media img { width: 100%; height: 100%; object-fit: cover; }
+  .closing__cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    will-change: transform, opacity;
+  }
+  .closing__meta { font-size: 14px; color: var(--grey); }
+  .btn {
+    display: inline-block;
+    padding: 16px 34px;
+    border-radius: 999px;
+    background: #f5f5f7;
+    color: var(--black);
+    font: 500 17px/1 var(--font);
+    text-decoration: none;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn:hover { transform: scale(1.04); background: #fff; }
+  .btn:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+  /* ---------- Móvil ---------- */
+  @media (max-width: 800px) {
+    .detail__grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: 34% 1fr;
+      align-items: start;
+      gap: 22px;
+      padding-top: 64px;
+      padding-bottom: 20px;
+    }
+    .detail__media { order: -1; }
+    .detail__steps { gap: 14px; }
+    .step__kicker { font-size: 10px; margin-bottom: 4px; }
+    .step__title { font-size: 22px; }
+    .step__text { font-size: 14px; margin-top: 4px; line-height: 1.35; }
+
+    .notes { min-height: 135vh; }
+    .notes__media { width: 150%; max-width: none; margin: 0 -25%; }
+    .notes__head { top: 7%; }
+    .note { max-width: 12.5em; }
+    .note--1 { top: 27%; }
+    .note--2 { top: 66%; }
+    .note--3 { top: 84%; right: 20px; }
+  }
+
+  /* ---------- Sin animación (reduced motion o sin GSAP) ---------- */
+  .static .hero { height: auto; display: block; padding-top: 22vh; }
+  .static .hero__media { position: relative; margin-top: 8vh; aspect-ratio: 1408 / 768; }
+  .static .hero__caption, .static .hero__hint { display: none; }
+  .static .detail, .static .closing { height: auto; min-height: 100vh; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <strong>AURA</strong>
+  <a href="#comprar">Comprar</a>
+</header>
+
+<main>
+
+  <!-- 1. HERO -->
+  <section class="hero" id="hero">
+    <div class="hero__media">
+      <!-- IMAGEN 1: botella frontal -->
+      <img src="IMAGEN_1.jpg" alt="Frasco de AURA Eau de Parfum visto de frente">
+    </div>
+    <div class="hero__copy">
+      <p class="hero__eyebrow">Eau de Parfum</p>
+      <h1 class="hero__title">AURA</h1>
+      <p class="hero__lead">Luz que se queda en la piel.</p>
+    </div>
+    <p class="hero__caption">Vidrio macizo. Cincuenta mililitros.</p>
+    <span class="hero__hint" aria-hidden="true"></span>
+  </section>
+
+  <!-- 2. DETALLE (pin) -->
+  <section class="detail" id="detalle">
+    <div class="detail__grid">
+      <div class="detail__steps">
+        <article class="step">
+          <p class="step__kicker">Notas de salida</p>
+          <h2 class="step__title">Limón y lima.</h2>
+          <p class="step__text">Piel de cítricos recién cortada. Los primeros minutos son limpios y luminosos.</p>
+        </article>
+        <article class="step">
+          <p class="step__kicker">Notas de corazón</p>
+          <h2 class="step__title">Orquídea blanca.</h2>
+          <p class="step__text">Un floral suave que aparece cuando el cítrico se calma y da cuerpo a la fragancia.</p>
+        </article>
+        <article class="step">
+          <p class="step__kicker">Notas de fondo</p>
+          <h2 class="step__title">Vainilla en vaina.</h2>
+          <p class="step__text">Cálida y seca, sin azúcar. Es lo que queda en la ropa al final del día.</p>
+        </article>
+        <article class="step">
+          <p class="step__kicker">El atomizador</p>
+          <h2 class="step__title">Metal grabado.</h2>
+          <p class="step__text">Anillo moleteado y una bruma fina y uniforme en cada pulsación.</p>
+        </article>
+      </div>
+      <div class="detail__media">
+        <!-- IMAGEN 2: macro del atomizador -->
+        <img src="IMAGEN_2.jpg" alt="Detalle macro del atomizador metálico del perfume">
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. INGREDIENTES (parallax) -->
+  <section class="notes" id="ingredientes">
+    <span class="notes__word notes__word--a" data-x="-14" aria-hidden="true">Vainilla</span>
+    <span class="notes__word notes__word--b" data-x="14" aria-hidden="true">Orquídea</span>
+    <span class="notes__word notes__word--c" data-x="-10" aria-hidden="true">Cítricos</span>
+
+    <h2 class="notes__head" data-speed="0.55">Tres ingredientes. Nada que esconder.</h2>
+
+    <div class="notes__media">
+      <!-- IMAGEN 3: perfume rodeado de ingredientes -->
+      <img src="IMAGEN_3.jpg" alt="Frasco de AURA rodeado de vainas de vainilla, orquídeas y pieles de cítricos">
+    </div>
+
+    <article class="note note--1" data-speed="0.9">
+      <h3 class="note__name">Vainilla</h3>
+      <p class="note__text">Vainas curadas lentamente para un fondo cálido y seco.</p>
+    </article>
+    <article class="note note--2" data-speed="1.35">
+      <h3 class="note__name">Orquídea</h3>
+      <p class="note__text">El corazón floral, blanco y cremoso.</p>
+    </article>
+    <article class="note note--3" data-speed="0.7">
+      <h3 class="note__name">Cítricos</h3>
+      <p class="note__text">Limón y lima prensados en frío para la salida.</p>
+    </article>
+  </section>
+
+  <!-- 4. CIERRE (revelación) -->
+  <section class="closing" id="comprar">
+    <div class="closing__bg" aria-hidden="true"></div>
+    <h2 class="closing__title">AURA. Tu luz.</h2>
+    <div class="closing__media">
+      <!-- IMAGEN 4: frasco con sombra dramática -->
+      <img src="IMAGEN_4.jpg" alt="Frasco de AURA con una sombra larga sobre una superficie blanca">
+    </div>
+    <div class="closing__cta">
+      <a class="btn" href="#">Comprar ahora</a>
+      <p class="closing__meta">Eau de Parfum · 50 ml</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- GSAP + ScrollTrigger (CDN) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  var root = document.documentElement;
+
+  // Sin GSAP (CDN caído) la página se queda en su versión estática y legible.
+  if (!window.gsap || !window.ScrollTrigger) { root.classList.add("static"); return; }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Easing global: salida larga y pesada, estilo Apple.
+  var EASE = "power3.out";
+  gsap.defaults({ ease: EASE, duration: 1 });
+
+  // "scrub" con inercia: la animación tarda un poco en alcanzar al scroll.
+  var SCRUB = 1.1;
+
+  var mm = gsap.matchMedia();
+
+  mm.add("(prefers-reduced-motion: reduce)", function () {
+    root.classList.add("static");
+    return function () { root.classList.remove("static"); };
+  });
+
+  mm.add("(prefers-reduced-motion: no-preference)", function () {
+
+    /* ===== 1. HERO: el título se difumina hacia arriba y la botella crece ===== */
+    gsap.set(".hero__media", { scale: 0.42, autoAlpha: 0, borderRadius: 40 });
+    gsap.set(".hero__caption", { autoAlpha: 0, y: 30 });
+
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: ".hero",
+        start: "top top",
+        end: "+=160%",
+        pin: true,
+        scrub: SCRUB,
+        anticipatePin: 1
+      }
+    })
+      .to(".hero__hint", { autoAlpha: 0, duration: 0.2 }, 0)
+      .to(".hero__copy", { yPercent: -55, autoAlpha: 0, filter: "blur(14px)", duration: 0.55 }, 0)
+      .to(".hero__media", { autoAlpha: 1, duration: 0.45 }, 0.1)
+      .to(".hero__media", { scale: 1, borderRadius: 0, duration: 0.9 }, 0.1)
+      .to(".hero__caption", { autoAlpha: 1, y: 0, duration: 0.3 }, 0.7);
+
+    /* ===== 2. DETALLE: imagen fija, los textos entran uno a uno ===== */
+    var steps = gsap.utils.toArray(".step");
+    gsap.set(steps, { autoAlpha: 0, y: 70 });
+    gsap.set(steps[0], { autoAlpha: 1, y: 0 });
+    gsap.set(".detail__media img", { scale: 1.25 });
+
+    var detailTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".detail",
+        start: "top top",
+        end: "+=" + steps.length * 85 + "%",
+        pin: true,
+        scrub: SCRUB,
+        anticipatePin: 1
+      }
+    });
+
+    // Zoom-out lento del macro durante todo el pin.
+    detailTl.to(".detail__media img", { scale: 1, ease: "none", duration: steps.length }, 0);
+
+    steps.forEach(function (step, i) {
+      if (i === 0) return;
+      detailTl
+        .to(steps.slice(0, i), { autoAlpha: 0.22, duration: 0.7 }, i - 0.35)   // atenúa los anteriores
+        .to(step, { autoAlpha: 1, y: 0, duration: 0.8 }, i - 0.35);            // entra el nuevo
+    });
+
+    // Entrada del primer bloque al llegar a la sección.
+    gsap.from(".detail__media", {
+      y: 120, autoAlpha: 0, duration: 1.4,
+      scrollTrigger: { trigger: ".detail", start: "top 70%", toggleActions: "play none none reverse" }
+    });
+
+    /* ===== 3. INGREDIENTES: parallax por capas ===== */
+    var notesST = { trigger: ".notes", start: "top bottom", end: "bottom top", scrub: SCRUB };
+
+    // Parallax puro: recorrido lineal (ease "none"); la inercia la da el scrub.
+    gsap.utils.toArray(".notes [data-speed]").forEach(function (el) {
+      var d = parseFloat(el.dataset.speed) * (window.innerWidth < 800 ? 120 : 260);
+      gsap.fromTo(el, { y: d }, { y: -d, ease: "none", scrollTrigger: notesST });
+    });
+
+    // Palabras de fondo: se cruzan en horizontal, más lentas que el resto.
+    gsap.utils.toArray(".notes__word").forEach(function (el) {
+      var x = parseFloat(el.dataset.x);
+      gsap.fromTo(el, { xPercent: x, y: 90 }, { xPercent: -x, y: -90, ease: "none", scrollTrigger: notesST });
+    });
+
+    // Imagen: capa más cercana, con una ligera inclinación 3D.
+    gsap.fromTo(".notes__media",
+      { y: -110, rotationX: 9, scale: 0.9 },
+      { y: 110, rotationX: -9, scale: 1.06, ease: "none", scrollTrigger: notesST });
+
+    /* ===== 4. CIERRE: el fondo funde a negro y el frasco sube ===== */
+    gsap.set(".closing__bg", { autoAlpha: 0 });
+    gsap.set(".closing__title", { autoAlpha: 0, y: 60 });
+    gsap.set(".closing__media", { autoAlpha: 0, y: 260, scale: 0.94 });
+    gsap.set(".closing__cta", { autoAlpha: 0, y: 140 });
+
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: ".closing",
+        start: "top top",
+        end: "+=140%",
+        pin: true,
+        scrub: SCRUB,
+        anticipatePin: 1
+      }
+    })
+      .to(".closing__bg", { autoAlpha: 1, ease: "power2.inOut", duration: 0.35 }, 0)
+      .to(".closing__title", { autoAlpha: 1, y: 0, duration: 0.45 }, 0.15)
+      .to(".closing__media", { autoAlpha: 1, y: 0, scale: 1, duration: 0.6 }, 0.28)
+      .to(".closing__cta", { autoAlpha: 1, y: 0, duration: 0.5 }, 0.45)
+      .to({}, { duration: 0.15 }); // pequeña pausa antes de soltar el pin
+  });
+
+  // Recalcula posiciones cuando terminan de cargar las imágenes.
+  window.addEventListener("load", function () { ScrollTrigger.refresh(); });
+})();
+</script>
+</body>
+</html>
